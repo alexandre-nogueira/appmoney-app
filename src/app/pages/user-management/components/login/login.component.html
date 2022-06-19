@@ -1,0 +1,73 @@
+<div class="container position-absolute top-50 start-50 translate-middle">
+  <div class="row justify-content-center">
+    <div class="col-lg-5 col-md-8 col-sm-10">
+      <div class="card shadow p-3">
+        <div class="card-body">
+          <h4 class="card-title mb-3">Login</h4>
+          <div class="card-text">
+            <form [formGroup]="userForm">
+              <div class="row">
+                <div class="col-12 mb-2">
+                  <label for="user" class="form-label">Usuário</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="user"
+                    formControlName="user"
+                    placeholder="nome@email.com"
+                  />
+                  <form-message
+                    message="Formato de email incorreto"
+                    *ngIf="
+        userForm.get('user')?.errors?.['email'] &&
+        userForm.get('user')?.touched"
+                  ></form-message>
+                  <form-message
+                    message="Email obrigatório"
+                    *ngIf="
+        userForm.get('user')?.errors?.['required'] &&
+        userForm.get('user')?.touched"
+                  ></form-message>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 mb-3">
+                  <label for="password" class="form-label">Senha</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="password"
+                    formControlName="password"
+                    placeholder="**********"
+                  />
+                  <form-message
+                    message="Senha obrigatória"
+                    *ngIf="
+        userForm.get('password')?.errors?.['required'] &&
+        userForm.get('password')?.touched"
+                  ></form-message>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-12">
+                  <a routerLink="/user/forgotMyPassword">esqueci minha senha</a>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 text-end">
+                  <button
+                    class="btn btn-primary"
+                    (click)="onLogin()"
+                    [disabled]="!userForm.valid"
+                  >
+                    Login
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
