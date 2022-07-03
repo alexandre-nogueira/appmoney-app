@@ -1,1 +1,135 @@
-<p>register-user works!</p>
+<div class="container centered-box">
+  <div class="row justify-content-center">
+    <div class="col-lg-5 col-md-8 col-sm-10">
+      <div class="card shadow p-3">
+        <div class="card-body">
+          <h4 class="card-title mb-3">Registrar novo Usuário</h4>
+          <div class="card-text">
+            <form [formGroup]="newUserForm">
+              <div class="row">
+                <div class="col-12 mb-2">
+                  <label for="email" class="form-label">Email</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    formControlName="email"
+                    placeholder="nome@email.com"
+                  />
+                  <form-message
+                    message="Formato de email incorreto"
+                    *ngIf="
+                    newUserForm.get('email')?.errors?.['email'] &&
+                    newUserForm.get('email')?.touched"
+                  ></form-message>
+                  <form-message
+                    message="Email obrigatório"
+                    *ngIf="
+                    newUserForm.get('email')?.errors?.['required'] &&
+                    newUserForm.get('email')?.touched"
+                  ></form-message>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 mb-2">
+                  <label for="firstName" class="form-label">Nome</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="firstName"
+                    placeholder="Nome"
+                  />
+                  <form-message
+                    message="Nome obrigatório"
+                    *ngIf="
+                    newUserForm.get('firstName')?.errors?.['required'] &&
+                    newUserForm.get('firstName')?.touched"
+                  ></form-message>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 mb-2">
+                  <label for="lastName" class="form-label">Sobrenome</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="lastName"
+                    placeholder="Sobrenome"
+                  />
+                  <form-message
+                    message="Sobrenome obrigatório"
+                    *ngIf="
+                    newUserForm.get('lastName')?.errors?.['required'] &&
+                    newUserForm.get('lastName')?.touched"
+                  ></form-message>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 mb-2">
+                  <label for="password" class="form-label">Senha</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    formControlName="password"
+                    placeholder="*********"
+                  />
+                  <form-message
+                    message="Senha obrigatória"
+                    *ngIf="
+                    newUserForm.get('password')?.errors?.['required'] &&
+                    newUserForm.get('password')?.touched"
+                  ></form-message>
+                  <form-message
+                    message="A senha deve ter no mínimo 5 caracteres"
+                    *ngIf="
+                     newUserForm.get('password')?.errors?.['minlength'] &&
+                     newUserForm.get('password')?.touched"
+                  ></form-message>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 mb-2">
+                  <label for="confirmPassword" class="form-label"
+                    >Confirmar Senha</label
+                  >
+                  <input
+                    type="password"
+                    class="form-control"
+                    formControlName="confirmPassword"
+                    placeholder="*********"
+                  />
+                  <form-message
+                    message="Senha obrigatória"
+                    *ngIf="
+                    newUserForm.get('confirmPassword')?.errors?.['required'] &&
+                    newUserForm.get('confirmPassword')?.touched"
+                  ></form-message>
+                  <form-message
+                    message="A senha deve ter no mínimo 5 caracteres"
+                    *ngIf="
+                   newUserForm.get('confirmPassword')?.errors?.['minlength'] &&
+                   newUserForm.get('confirmPassword')?.touched"
+                  ></form-message>
+                  <form-message
+                    message="Senhas não coincidem"
+                    *ngIf="newUserForm.errors?.['passwordNotMatch']"
+                  ></form-message>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 text-end">
+                  <button
+                    class="btn btn-primary"
+                    (click)="registerUser()"
+                    [disabled]="!newUserForm.valid"
+                  >
+                    Continuar
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

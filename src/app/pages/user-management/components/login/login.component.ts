@@ -1,3 +1,4 @@
+import { AlertService } from './../../../../shared/components/alert/alert.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { Component, OnInit } from '@angular/core';
@@ -14,7 +15,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private alertService: AlertService
   ) {}
 
   ngOnInit(): void {
@@ -32,7 +34,11 @@ export class LoginComponent implements OnInit {
       next: () => {
         this.router.navigate(['home']);
       },
-      error: (err) => console.log(err),
+      error: (err) => {
+        this.alertService.danger('Usuário ou senha inválidos');
+        this.userForm.reset();
+        console.log(err);
+      },
     });
   }
 }

@@ -6,4 +6,21 @@
 
 body {
   background-color: #f8f9fa;
+  padding-top: 55px;
+  padding-bottom: 65px;
+}
+
+.centered-box {
+  position: inherit;
+  margin-top: 15px;
+}
+
+@media screen and (min-width: 992px){
+  .centered-box {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+    margin-top: 0px;
+  }
 }

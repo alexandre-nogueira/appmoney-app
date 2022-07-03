@@ -1,0 +1,11 @@
+<div *ngFor="let alert of alerts" class="container mt-1">
+  <div class="{{ alert.type }} alert-dismissible text-center" role="alert">
+    {{ alert.message }}
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+    ></button>
+  </div>
+</div>

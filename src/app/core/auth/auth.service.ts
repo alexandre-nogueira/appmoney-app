@@ -32,24 +32,10 @@ export class AuthService {
   }
 
   public logout() {
-    this.httpClient.get(`${API}/user/logout`).subscribe({
-      next: () => {
+    return this.httpClient.get(`${API}/user/logout`).pipe(
+      tap(() => {
         this.userService.logout();
-      },
-      error: (err) => console.log(err),
-    });
-  }
-
-  public recoverPassword(email: string) {
-    this.httpClient
-      .post(`${API}/user/forgotPassword`, { email: email })
-      .subscribe({
-        next: (data) => {
-          console.log(data);
-        },
-        error: (error) => {
-          console.log(error);
-        },
-      });
+      })
+    );
   }
 }

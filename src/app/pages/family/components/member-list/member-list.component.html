@@ -1,0 +1,15 @@
+<div *ngIf="membersList$ | async as membersList; else hasNoMembers">
+  <div *ngFor="let member of membersList">
+    <p>{{ member.firstName }}</p>
+  </div>
+</div>
+<ng-template #hasNoMembers>
+  <div *ngIf="!resolved" class="contatiner mt-3">
+    <loading></loading>
+  </div>
+  <div *ngIf="resolved" class="contatiner mt-3">
+    <div class="row text-center">
+      <h4 class="display-6">Nenhum membro encontrado</h4>
+    </div>
+  </div>
+</ng-template>

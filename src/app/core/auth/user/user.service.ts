@@ -1,15 +1,17 @@
+import { HttpClient } from '@angular/common/http';
 import { User } from './user';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, first } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 const KEY = 'userData';
+const API = environment.apiURL;
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  constructor(private router: Router) {
+  constructor(private httpClient: HttpClient) {
     if (this.isLogged()) {
       this.updateUserSubject(this.getUserData() ?? {});
     }
@@ -51,10 +53,54 @@ export class UserService {
   public logout() {
     localStorage.removeItem(KEY);
     this.updateUserSubject({});
-    this.router.navigate(['']);
   }
 
   public getUserSubjectData() {
     return this.userSubject.asObservable();
+  }
+
+  public recoverPassword(email: string) {
+    return this.httpClient.post(`${API}/user/forgotPassword`, {
+      email: email,
+      appLinkAdress: 'http://localhost:4200/user/recoverPassword',
+    });
+  }
+
+  public getUserFromRPT(rpt: string) {
+    return this.httpClient.post(`${API}/user/getUserFromRPT`, {
+      rpt: rpt,
+    });
+  }
+
+  public changepassword(newPassword: string, rpt: string) {
+    if (rpt === '') {
+      return this.httpClient.post(`${API}/user/updatePassword`, {
+        newPassword: newPassword,
+      });
+    } else {
+      return this.httpClient.post(`${API}/user/resetPassword/${rpt}`, {
+        newPassword: newPassword,
+      });
+    }
+  }
+
+  public register(
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+    token: string
+  ) {
+    return this.httpClient.post(`${API}/user/register`, {
+      email: email,
+      password: password,
+      firstName: firstName,
+      lastName: lastName,
+      token: token,
+    });
+  }
+
+  public confirmUser(confirmUserToken: string) {
+    return this.httpClient.get(`${API}/user/confirm/${confirmUserToken}`);
   }
 }

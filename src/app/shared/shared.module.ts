@@ -1,10 +1,12 @@
-import { FormMessageComponent } from './form-message/form-message.component';
+import { FormMessageComponent } from './components/form-message/form-message.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AlertComponent } from './components/alert/alert.component';
+import { LoadingComponent } from './components/loading/loading.component';
 
 @NgModule({
-  declarations: [FormMessageComponent],
+  declarations: [FormMessageComponent, AlertComponent, LoadingComponent],
   imports: [CommonModule],
-  exports: [FormMessageComponent],
+  exports: [FormMessageComponent, AlertComponent, LoadingComponent],
 })
 export class SharedModule {}

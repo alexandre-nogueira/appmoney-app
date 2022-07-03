@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-dark text-white">
+<nav class="navbar navbar-dark navbar-expand-lg bg-dark fixed-top">
   <div class="container-fluid">
     <a class="navbar-brand text-white" routerLink="/home">App Money</a>
     <button
@@ -10,7 +10,7 @@
       aria-expanded="false"
       aria-label="Toggle navigation"
     >
-      <span class="navbar-toggler-icon text-white"></span>
+      <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav me-auto">
@@ -41,7 +41,7 @@
         </li>
         <li class="nav-item dropdown" *ngIf="isLogged">
           <a
-            class="nav-link dropdown-toggle text-white"
+            class="nav-link dropdown-toggle"
             href="#"
             id="navbarDropdownMenuLink"
             role="button"
@@ -81,8 +81,11 @@
             class="d-flex align-items-center me-3"
             *ngIf="user$ | async as user"
           >
-            <fa-icon [icon]="faUser" class="me-1" size="2x"></fa-icon>
-            <!-- <span class="me-4">{{ user.firstName }}</span> -->
+            <fa-icon
+              [icon]="faUser"
+              class="me-1 text-white"
+              size="2x"
+            ></fa-icon>
             <div class="nav-item dropdown">
               <a
                 class="nav-link dropdown-toggle text-white"
@@ -95,8 +98,14 @@
                 {{ user.firstName }}
               </a>
               <ul class="dropdown-menu" aria-labelledby="userDropdown ">
-                <li><a class="dropdown-item">Configurações</a></li>
-                <li><a class="dropdown-item">Família</a></li>
+                <li>
+                  <a routerLink="/user/changePassword" class="dropdown-item"
+                    >Trocar senha</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" routerLink="/family">Família</a>
+                </li>
                 <li><hr class="dropdown-divider" /></li>
                 <li><a class="dropdown-item" (click)="logout()">Sair</a></li>
               </ul>

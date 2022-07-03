@@ -1,0 +1,29 @@
+<div
+  *ngIf="familyInvitation$ | async as familyInvitation; else invalidInvitation"
+>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center">
+        <h4>
+          Seja bem vindo, você foi convidado para se juntar a família
+          {{ familyInvitation.familyName }}
+        </h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <register-user [token]="token"></register-user>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #invalidInvitation>
+  <div *ngIf="!resolved" class="contatiner mt-3">
+    <loading></loading>
+  </div>
+  <div *ngIf="resolved" class="contatiner mt-3">
+    <div class="row text-center">
+      <h4 class="display-6">Convite inválido</h4>
+    </div>
+  </div>
+</ng-template>

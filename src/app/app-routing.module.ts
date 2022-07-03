@@ -21,6 +21,11 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'family',
+    loadChildren: () =>
+      import('./pages/family/family.module').then((m) => m.FamilyModule),
+  },
+  {
     path: '**',
     component: PageNotFoundComponent,
   },

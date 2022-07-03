@@ -1,3 +1,5 @@
+import { Router } from '@angular/router';
+import { AlertService } from './../../../shared/components/alert/alert.service';
 import { AuthService } from './../../auth/auth.service';
 import { UserService } from './../../auth/user/user.service';
 import { Component, OnInit } from '@angular/core';
@@ -11,7 +13,9 @@ import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 export class MainMenuComponent implements OnInit {
   constructor(
     private userService: UserService,
-    private authService: AuthService
+    private authService: AuthService,
+    private alertService: AlertService,
+    private router: Router
   ) {}
 
   faUser = faUserCircle;
@@ -23,10 +27,18 @@ export class MainMenuComponent implements OnInit {
     });
   }
 
-  public isMenuCollapsed = true;
+  // public isMenuCollapsed = true;
   public isLogged = false;
 
   logout() {
-    this.authService.logout();
+    this.authService.logout().subscribe({
+      next: () => {
+        this.router.navigate(['home']);
+      },
+      error: (error) => {
+        console.log(error);
+        this.alertService.warning('Não foi possível efetuar o logout');
+      },
+    });
   }
 }
