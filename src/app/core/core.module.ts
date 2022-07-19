@@ -7,9 +7,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FooterComponent } from './components/footer/footer.component';
+import { LoggedOnlyDirective } from './directives/logged-only.directive';
 
 @NgModule({
-  declarations: [MainMenuComponent, PageNotFoundComponent, FooterComponent],
+  declarations: [MainMenuComponent, PageNotFoundComponent, FooterComponent, LoggedOnlyDirective],
   imports: [CommonModule, RouterModule, FontAwesomeModule],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

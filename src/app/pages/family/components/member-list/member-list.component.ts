@@ -4,7 +4,7 @@ import { FamilyService } from '../../services/family.service';
 import { Observable, tap } from 'rxjs';
 
 @Component({
-  selector: 'app-member-list',
+  selector: 'member-list',
   templateUrl: './member-list.component.html',
   styleUrls: ['./member-list.component.scss'],
 })
@@ -17,6 +17,11 @@ export class MemberListComponent implements OnInit {
   ngOnInit(): void {
     this.membersList$ = this.familyService
       .getMembers()
-      .pipe(tap({ error: () => (this.resolved = true) }));
+      .pipe(
+        tap({
+          error: () => (this.resolved = true),
+          complete: () => (this.resolved = true),
+        })
+      );
   }
 }

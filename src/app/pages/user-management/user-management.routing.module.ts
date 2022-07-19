@@ -38,7 +38,7 @@ const routes: Routes = [
     component: ChangePasswordComponent,
   },
   {
-    path: 'confirmUser/:confirmUserToken',
+    path: 'confirm/:confirmUserToken',
     component: ConfirmUserComponent,
     canActivate: [LoginGuard],
   },

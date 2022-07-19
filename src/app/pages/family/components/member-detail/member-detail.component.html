@@ -1,1 +1,23 @@
-<p>member-detail works!</p>
+<div class="card shadow">
+  <div class="card-body">
+    <h6 class="card-title ap-card-title pt-2 pb-1">
+      {{ familyMember.firstName }} {{ familyMember.lastName }}
+    </h6>
+    <div class="card-text mt-3">
+      <div class="row justify-content-center">
+        <div class="col-12 text-center">
+          <fa-icon
+            [icon]="faUser"
+            size="8x"
+            class="text-primary text-opacity-50"
+          ></fa-icon>
+        </div>
+      </div>
+      <div class="row mt-3 justify-content-center">
+        <div class="col-12 text-center">
+          <span class="badge bg-primary">Primary</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

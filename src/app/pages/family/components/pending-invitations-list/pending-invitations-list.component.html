@@ -1,0 +1,30 @@
+<div
+  *ngIf="
+    pendingInvitations$ | async as pendingInvitations;
+    else hasNoPendingInvitations
+  "
+>
+  <div
+    *ngIf="pendingInvitations.length > 0; else hasNoPendingInvitations"
+    class="row"
+  >
+    <div
+      *ngFor="let pendingInvitation of pendingInvitations"
+      class="col-lg-4 col-md-6 col-sm-12"
+    >
+      <pending-invitation-detail
+        [pendingInvitation]="pendingInvitation"
+      ></pending-invitation-detail>
+    </div>
+  </div>
+</div>
+<ng-template #hasNoPendingInvitations>
+  <div *ngIf="!resolved" class="container mt-3">
+    <loading></loading>
+  </div>
+  <div *ngIf="resolved" class="container mt-3">
+    <div class="row text-center">
+      <h4 class="display-6">Sem convites pendentes</h4>
+    </div>
+  </div>
+</ng-template>

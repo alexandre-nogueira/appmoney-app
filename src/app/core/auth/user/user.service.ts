@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 
 const KEY = 'userData';
 const API = environment.apiURL;
+const APP = environment.appURL;
 
 @Injectable({
   providedIn: 'root',
@@ -62,7 +63,7 @@ export class UserService {
   public recoverPassword(email: string) {
     return this.httpClient.post(`${API}/user/forgotPassword`, {
       email: email,
-      appLinkAdress: 'http://localhost:4200/user/recoverPassword',
+      appLinkAdress: `${APP}/user/recoverPassword`,
     });
   }
 
@@ -97,6 +98,7 @@ export class UserService {
       firstName: firstName,
       lastName: lastName,
       token: token,
+      appLinkAdress: `${APP}/user/confirm`,
     });
   }
 

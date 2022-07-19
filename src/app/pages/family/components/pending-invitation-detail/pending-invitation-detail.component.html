@@ -1,0 +1,29 @@
+<div class="card shadow mb-4">
+  <div class="card-body">
+    <h6 class="card-title ap-card-title pt-2 pb-1">
+      {{ pendingInvitation.invitedEmail }}
+    </h6>
+
+    <div class="card-text mt-3">
+      <p>{{ pendingInvitation.message }}</p>
+      <div class="row mt-1">
+        <div class="col-6 text-center">
+          <button
+            class="btn btn-primary"
+            (click)="resendInvitation(pendingInvitation)"
+          >
+            Reenviar
+          </button>
+        </div>
+        <div class="col-6 text-center">
+          <button
+            class="btn btn-danger"
+            (click)="confirmCancelInvitation(pendingInvitation.invitedEmail)"
+          >
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,46 @@
+<div class="container">
+  <div class="row mt-4">
+    <div class="col-12">
+      <h3 class="display-4">Sua família</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-9 col-md-8 col-sm-12">
+      <member-list></member-list>
+    </div>
+    <div class="col-lg-3 col-md-4 col-sm-6 mt-3">
+      <div class="card shadow full-height">
+        <div class="card-body">
+          <div class="card-text mt-2">
+            <div class="row mt-5">
+              <div class="col-12 text-center">
+                <a (click)="invite()">
+                  <fa-icon
+                    [icon]="faCirclePlus"
+                    size="5x"
+                    class="text-success text-opacity-50"
+                  ></fa-icon>
+                </a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 text-center mt-2">
+                <p class="text-success">Adicionar um membro da família</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-5">
+    <div class="col-12">
+      <h5 class="fs-5">Convites pendentes</h5>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 mt-3">
+      <pending-invitations-list></pending-invitations-list>
+    </div>
+  </div>
+</div>

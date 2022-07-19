@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
 
     this.authService.authenticate(user, password).subscribe({
       next: () => {
-        this.router.navigate(['home']);
+        this.router.navigate(['/home']);
       },
       error: (err) => {
         this.alertService.danger('Usuário ou senha inválidos');

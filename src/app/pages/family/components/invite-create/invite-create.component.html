@@ -1,0 +1,62 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">Convidar para a família</h5>
+</div>
+<div class="modal-body">
+  <form [formGroup]="inviteForm">
+    <div class="row">
+      <div class="col-12">
+        <label for="invitedEmail" class="form-label"></label>
+        <input
+          type="email"
+          class="form-control"
+          id="invitedEmail"
+          formControlName="invitedEmail"
+          placeholder="nome@email.com"
+        />
+        <form-message
+          message="Formato de email incorreto"
+          *ngIf="
+inviteForm.get('invitedEmail')?.errors?.['email'] &&
+inviteForm.get('invitedEmail')?.touched"
+        ></form-message>
+        <form-message
+          message="Email obrigatório"
+          *ngIf="
+inviteForm.get('invitedEmail')?.errors?.['required'] &&
+inviteForm.get('invitedEmail')?.touched"
+        ></form-message>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-12">
+        <label for="invitedEmail" class="form-label"></label>
+        <textarea
+          type="text"
+          class="form-control"
+          id="message"
+          formControlName="message"
+          placeholder="Digite aqui uma mensagem para seu convidado"
+        ></textarea>
+        <form-message
+          message="Mensagem obrigatória"
+          *ngIf="
+inviteForm.get('message')?.errors?.['required'] &&
+inviteForm.get('message')?.touched"
+        ></form-message>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="close()">
+    Cancelar
+  </button>
+  <button
+    type="button"
+    class="btn btn-primary"
+    (click)="create()"
+    [disabled]="!inviteForm.valid"
+  >
+    Enviar convite
+  </button>
+</div>
