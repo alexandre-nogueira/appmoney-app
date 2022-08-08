@@ -30,6 +30,7 @@ export class PendingInvitationDetailComponent implements OnInit {
     this.familyService.cancelInvitation(invitedEmail).subscribe({
       next: () => {
         this.alertService.success('Convite cancelado');
+        this.familyService.refreshPendingInvitationsList();
       },
       error: (error) => {
         console.log(error.message);

@@ -1,0 +1,49 @@
+<div *ngIf="accountCategoryList$ | async as accountCategoryList; else empty">
+  <div *ngIf="accountCategoryList.length > 0; else empty">
+    <div class="row text-center">
+      <div class="col-lg-2 col-md-3 col-sm-12">
+        <a (click)="new()">
+          <fa-icon [icon]="faCirclePlus" size="2x" class="text-success">
+          </fa-icon>
+        </a>
+      </div>
+      <div class="col-lg-10 col-md-9 col-sm-12">
+        <input
+          type="text"
+          placeholder="filtrar"
+          class="form-control"
+          [(ngModel)]="filterText"
+        />
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-12">
+        <table class="table">
+          <tbody>
+            <tr
+              *ngFor="
+                let accountCategory of accountCategoryList
+                  | filterTable: filterText
+              "
+            >
+              <td (click)="show(accountCategory)">
+                {{ accountCategory.description }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #empty>
+  <div *ngIf="!resolved" class="container mt-3">
+    <loading></loading>
+  </div>
+  <div *ngIf="resolved" class="container mt-3">
+    <div class="row text-center">
+      <h4 class="display-6">Não há categorias de conta cadastradas</h4>
+    </div>
+  </div>
+</ng-template>

@@ -6,7 +6,12 @@ import { LoadingComponent } from './components/loading/loading.component';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 
 @NgModule({
-  declarations: [FormMessageComponent, AlertComponent, LoadingComponent, ConfirmationModalComponent],
+  declarations: [
+    FormMessageComponent,
+    AlertComponent,
+    LoadingComponent,
+    ConfirmationModalComponent,
+  ],
   imports: [CommonModule],
   exports: [FormMessageComponent, AlertComponent, LoadingComponent],
 })

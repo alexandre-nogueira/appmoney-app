@@ -1,8 +1,5 @@
 <div class="row" *ngIf="membersList$ | async as membersList; else hasNoMembers">
-  <div
-    *ngFor="let member of membersList"
-    class="col-lg-4 col-md-6 col-sm-6 mt-3"
-  >
+  <div *ngFor="let member of membersList" class="col-lg-4 col-md-6 col-sm-6">
     <member-detail [familyMember]="member"></member-detail>
   </div>
 </div>

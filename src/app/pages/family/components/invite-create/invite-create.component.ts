@@ -12,6 +12,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 export class InviteCreateComponent implements OnInit {
   @Input() invitedEmail!: string;
   inviteForm!: FormGroup;
+  disableEmail = false;
 
   constructor(
     public activeModal: NgbActiveModal,
@@ -21,9 +22,12 @@ export class InviteCreateComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    if (this.invitedEmail) {
+      this.disableEmail = true;
+    }
     this.inviteForm = this.formBuilder.group({
       invitedEmail: [
-        this.invitedEmail,
+        { value: this.invitedEmail, disabled: this.disableEmail },
         [Validators.email, Validators.required],
       ],
       message: ['', Validators.required],
@@ -40,6 +44,7 @@ export class InviteCreateComponent implements OnInit {
     this.familyService.inviteMember(invitedEmail, message).subscribe({
       next: () => {
         this.alertService.success('Convite enviado');
+        this.familyService.refreshPendingInvitationsList();
       },
       error: (error) => {
         this.alertService.danger('Erro ao enviar convite');

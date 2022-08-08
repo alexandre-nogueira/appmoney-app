@@ -1,3 +1,4 @@
+import { Subject } from 'rxjs';
 import { InviteCreateComponent } from './../components/invite-create/invite-create.component';
 import { FamilyInvitations } from './../interfaces/family-invitation';
 import { FamilyMember } from './../interfaces/family-member';
@@ -14,6 +15,8 @@ const APP = environment.appURL;
   providedIn: 'root',
 })
 export class FamilyService {
+  pendingInvitations$: Subject<FamilyInvitations> = new Subject();
+
   constructor(private httpClient: HttpClient, private modal: NgbModal) {}
 
   getMemberInvitation(token: string) {
@@ -27,9 +30,18 @@ export class FamilyService {
   }
 
   getPendingInvitations() {
-    return this.httpClient.get<FamilyInvitations>(
-      `${API}/family/pendingInvitations`
-    );
+    this.refreshPendingInvitationsList();
+    return this.pendingInvitations$.asObservable();
+  }
+
+  refreshPendingInvitationsList() {
+    this.httpClient
+      .get<FamilyInvitations>(`${API}/family/pendingInvitations`)
+      .subscribe({
+        next: (data) => {
+          this.pendingInvitations$.next(data);
+        },
+      });
   }
 
   openCreateDialog(email?: string) {
@@ -43,7 +55,7 @@ export class FamilyService {
     return this.httpClient.post(`${API}/family/inviteMember`, {
       invitedEmail: invitedEmail,
       message: message,
-      appLinkAdress: APP,
+      appLinkAdress: `${APP}/family/invitation`,
     });
   }
 

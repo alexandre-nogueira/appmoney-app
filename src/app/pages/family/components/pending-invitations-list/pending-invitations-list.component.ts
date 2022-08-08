@@ -1,4 +1,7 @@
-import { FamilyInvitation } from './../../interfaces/family-invitation';
+import {
+  FamilyInvitation,
+  FamilyInvitations,
+} from './../../interfaces/family-invitation';
 import { Observable, tap } from 'rxjs';
 import { FamilyService } from './../../services/family.service';
 import { Component, OnInit } from '@angular/core';
@@ -9,7 +12,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./pending-invitations-list.component.scss'],
 })
 export class PendingInvitationsListComponent implements OnInit {
-  pendingInvitations$!: Observable<FamilyInvitation[]>;
+  pendingInvitations$!: Observable<FamilyInvitations>;
   resolved = false;
 
   constructor(private familyService: FamilyService) {}

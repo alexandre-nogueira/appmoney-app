@@ -52,7 +52,11 @@
             Cadastros
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item">Categorias de conta</a></li>
+            <li>
+              <a class="dropdown-item" routerLink="/accountCategory"
+                >Categorias de conta</a
+              >
+            </li>
             <li><a class="dropdown-item">Agrupadores</a></li>
             <li><a class="dropdown-item">Categorias de lançamento</a></li>
             <li><a class="dropdown-item">Contas</a></li>
@@ -99,6 +103,7 @@
                 {{ user.firstName }}
               </a>
               <ul class="dropdown-menu" aria-labelledby="userDropdown ">
+                <li><a class="dropdown-item" href="">Perfil</a></li>
                 <li>
                   <a routerLink="/user/changePassword" class="dropdown-item"
                     >Trocar senha</a
