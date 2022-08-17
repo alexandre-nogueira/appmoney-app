@@ -15,6 +15,11 @@ body {
   margin-top: 15px;
 }
 
+.crudTableContainer {
+  overflow-y: auto;
+  max-height: 30vh;
+}
+
 @media screen and (min-width: 992px){
   .centered-box {
     position: absolute;
@@ -23,6 +28,12 @@ body {
     top: 50%;
     margin-top: 0px;
   }
+
+  .crudTableContainer {
+    overflow-y: auto;
+    max-height: 50vh;
+  }
+
 }
 
 
@@ -35,3 +46,11 @@ body {
   border-bottom-width: 1px;
   border-bottom-color:  lightgray;
 }
+
+a:hover {
+  cursor:pointer;
+ }
+
+ tr.crudTableRow:hover{
+  cursor: pointer;
+ }

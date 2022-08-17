@@ -5,10 +5,26 @@
     </div>
   </div>
   <div class="row mt-2">
-    <div class="col-lg-3 col-md-6 col-sm-12">
-      <account-category-list></account-category-list>
+    <div class="col-lg-4 col-md-6 col-sm-12">
+      <div class="row">
+        <div class="col-12">
+          <a (click)="new()">
+            <fa-icon
+              [icon]="faCirclePlus"
+              size="3x"
+              class="text-primary text-opacity-75"
+            >
+            </fa-icon>
+          </a>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-12">
+          <account-category-list></account-category-list>
+        </div>
+      </div>
     </div>
-    <div class="col-lg-9 col-md-6 col-sm-12">
+    <div class="col-lg-8 col-md-6 col-sm-12">
       <account-category-detail></account-category-detail>
     </div>
   </div>

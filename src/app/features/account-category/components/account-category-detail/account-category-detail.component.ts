@@ -10,7 +10,7 @@ import {
 import { UpdateState } from './../../../../shared/enums/UpdateState';
 import { AccountCategoryStateService } from './../../services/account-category-state.service';
 import { AccountCategoryService } from './../../services/account-category.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AccountCategory } from '../../interfaces/account-category';
 import { take } from 'rxjs/operators';
 
@@ -27,8 +27,9 @@ export class AccountCategoryDetailComponent implements OnInit {
   faPenToSquare = faPenToSquare;
   faTrash = faTrash;
   faFloppyDisk = faFloppyDisk;
-
   descriptionEnabled = true;
+
+  @ViewChild('descriptionInput') emailInput!: ElementRef<HTMLInputElement>;
 
   screenController = new ScreenController([
     {
@@ -74,15 +75,24 @@ export class AccountCategoryDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.accountCategoryStateService.getState().subscribe({
-      next: (state) => this.setState(state),
-    });
-    this.accountCategoryStateService.getAccountCategory().subscribe({
-      next: (accountCategory) => {
-        this.accountCategory = accountCategory;
-        this.accountCategoryForm.patchValue({
-          description: accountCategory.description,
-        });
+    // this.accountCategoryStateService.getState().subscribe({
+    //   next: (state) => this.setState(state),
+    // });
+    // this.accountCategoryStateService.getAccountCategory().subscribe({
+    //   next: (accountCategory) => {
+    //     this.accountCategory = accountCategory;
+    //     this.accountCategoryForm.patchValue({
+    //       description: accountCategory.description,
+    //     });
+    //   },
+    // });
+
+    this.accountCategoryStateService.getAccountCategoryState().subscribe({
+      next: (accountCategoryState) => {
+        this.setState(
+          accountCategoryState.state,
+          accountCategoryState.accountCategory
+        );
       },
     });
 
@@ -94,16 +104,22 @@ export class AccountCategoryDetailComponent implements OnInit {
     });
   }
 
-  setState(state: UpdateState) {
+  setState(state: UpdateState, accountCategory?: AccountCategory) {
     this.state = state;
     this.screenController.setEnabledStatus(
       this.accountCategoryForm,
       'description',
       this.state
     );
-    // this.setEnabledStatus('description', this.state);
+    if (accountCategory) {
+      this.accountCategory = accountCategory;
+      this.accountCategoryForm.patchValue({
+        description: accountCategory.description,
+      });
+    }
     if (this.state === UpdateState.CREATE) {
       this.accountCategoryForm.reset();
+      this.emailInput.nativeElement.focus();
     }
   }
 

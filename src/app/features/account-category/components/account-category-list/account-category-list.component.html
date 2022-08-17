@@ -1,13 +1,7 @@
 <div *ngIf="accountCategoryList$ | async as accountCategoryList; else empty">
   <div *ngIf="accountCategoryList.length > 0; else empty">
     <div class="row text-center">
-      <div class="col-lg-2 col-md-3 col-sm-12">
-        <a (click)="new()">
-          <fa-icon [icon]="faCirclePlus" size="2x" class="text-success">
-          </fa-icon>
-        </a>
-      </div>
-      <div class="col-lg-10 col-md-9 col-sm-12">
+      <div class="col-lg-9 col-md-10 col-sm-12">
         <input
           type="text"
           placeholder="filtrar"
@@ -16,18 +10,21 @@
         />
       </div>
     </div>
-    <div class="row mt-2">
+    <div class="row crudTableContainer mt-1">
       <div class="col-12">
-        <table class="table">
+        <table class="table table-hover">
           <tbody>
             <tr
+              class="crudTableRow"
               *ngFor="
                 let accountCategory of accountCategoryList
                   | filterTable: filterText
               "
             >
               <td (click)="show(accountCategory)">
-                {{ accountCategory.description }}
+                <a>
+                  {{ accountCategory.description }}
+                </a>
               </td>
             </tr>
           </tbody>
