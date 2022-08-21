@@ -1,5 +1,5 @@
 import { AlertService } from './alert.service';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Alert } from './alert';
 // import { setTimeout } from 'timers';
 
@@ -18,7 +18,6 @@ export class AlertComponent implements OnInit {
     this.alertService.getAlert().subscribe({
       next: (alert) => {
         this.alerts.push(alert);
-        console.log(this.alerts);
         setTimeout(() => {
           this.removeAlert(alert);
         }, this.timeout);

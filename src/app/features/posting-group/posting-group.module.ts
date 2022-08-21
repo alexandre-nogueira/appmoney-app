@@ -5,9 +5,16 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { PostingGroupRoutingModule } from './posting-group-routing.module';
+import { PostingGroupMainComponent } from './components/posting-group-main/posting-group-main.component';
+import { PostingGroupListComponent } from './components/posting-group-list/posting-group-list.component';
+import { PostingGroupDetailComponent } from './components/posting-group-detail/posting-group-detail.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    PostingGroupMainComponent,
+    PostingGroupListComponent,
+    PostingGroupDetailComponent
+  ],
   imports: [
     CommonModule,
     PostingGroupRoutingModule,

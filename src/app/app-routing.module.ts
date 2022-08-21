@@ -33,6 +33,20 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'postingGroup',
+    loadChildren: () =>
+      import('./features/posting-group/posting-group.module').then(
+        (m) => m.PostingGroupModule
+      ),
+  },
+  {
+    path: 'postingCategory',
+    loadChildren: () =>
+      import('./features/posting-category/posting-category.module').then(
+        (m) => m.PostingCategoryModule
+      ),
+  },
+  {
     path: '**',
     component: PageNotFoundComponent,
   },

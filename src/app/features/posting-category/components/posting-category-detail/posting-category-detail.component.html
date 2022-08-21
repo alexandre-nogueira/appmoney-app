@@ -1,0 +1,65 @@
+<div class="row">
+  <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+    <div class="card shadow p-2">
+      <div class="card-body">
+        <div class="card-text">
+          <div class="row">
+            <form [formGroup]="postingCategoryForm">
+              <div class="row">
+                <div class="col-12">
+                  <label for="description" class="form-label">Descrição</label>
+                  <input
+                    #descriptionInput
+                    type="text"
+                    class="form-control"
+                    id="description"
+                    formControlName="description"
+                  />
+                  <form-message
+                    message="Descrição obrigatória"
+                    *ngIf="
+                  postingCategoryForm.get('description')?.errors?.['required'] &&
+                  postingCategoryForm.get('description')?.touched"
+                  ></form-message>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="row mt-3">
+            <div class="col-12 text-end">
+              <button
+                class="btn btn-danger"
+                (click)="confirmDelete()"
+                *ngIf="
+                  screenController.getFieldStatus('deleteButton', this.state)
+                "
+              >
+                <fa-icon [icon]="faTrash"></fa-icon>
+              </button>
+
+              <button
+                class="btn btn-secondary ms-2"
+                (click)="setStateToUpdate()"
+                *ngIf="
+                  screenController.getFieldStatus('editButton', this.state)
+                "
+              >
+                <fa-icon [icon]="faPenToSquare"></fa-icon>
+              </button>
+              <button
+                class="btn btn-primary ms-2"
+                (click)="createOrUpdate()"
+                [disabled]="!postingCategoryForm.valid"
+                *ngIf="
+                  screenController.getFieldStatus('saveButton', this.state)
+                "
+              >
+                <fa-icon [icon]="faFloppyDisk"></fa-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

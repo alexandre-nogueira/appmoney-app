@@ -1,4 +1,3 @@
-import { FilterTablePipe } from './pipes/filter-table.pipe';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SharedModule } from './../../shared/shared.module';
@@ -15,7 +14,6 @@ import { AccountCategoryDetailComponent } from './components/account-category-de
     AccountCategoryListComponent,
     AccountCategoryMainComponent,
     AccountCategoryDetailComponent,
-    FilterTablePipe,
   ],
   imports: [
     CommonModule,

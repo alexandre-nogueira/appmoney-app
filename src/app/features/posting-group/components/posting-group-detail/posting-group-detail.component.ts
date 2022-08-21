@@ -1,28 +1,28 @@
+import { PostingGroup } from './../../interfaces/posting-group';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { take } from 'rxjs/operators';
-import { UpdateState } from './../../../../shared/enums/UpdateState';
-import { AccountCategoryService } from './../../services/account-category.service';
-import { AccountCategory } from '../../interfaces/account-category';
-import { CrudStateService } from './../../../../shared/services/crud-state.service';
-import { ConfirmationModalService } from './../../../../shared/components/confirmation-modal/confirmation-modal.service';
-import { ScreenController } from './../../../../shared/utils/screenControl/screen-controller';
-import { AlertService } from './../../../../shared/components/alert/alert.service';
+import { UpdateState } from 'src/app/shared/enums/UpdateState';
+import { PostingGroupService } from './../../services/posting-group.service';
+import { AlertService } from 'src/app/shared/components/alert/alert.service';
+import { ConfirmationModalService } from 'src/app/shared/components/confirmation-modal/confirmation-modal.service';
+import { CrudStateService } from 'src/app/shared/services/crud-state.service';
 import {
+  faFloppyDisk,
   faPenToSquare,
   faTrash,
-  faFloppyDisk,
 } from '@fortawesome/free-solid-svg-icons';
+import { ScreenController } from 'src/app/shared/utils/screenControl/screen-controller';
+import { take } from 'rxjs';
 
 @Component({
-  selector: 'account-category-detail',
-  templateUrl: './account-category-detail.component.html',
-  styleUrls: ['./account-category-detail.component.scss'],
+  selector: 'posting-group-detail',
+  templateUrl: './posting-group-detail.component.html',
+  styleUrls: ['./posting-group-detail.component.scss'],
 })
-export class AccountCategoryDetailComponent implements OnInit {
+export class PostingGroupDetailComponent implements OnInit {
   state: UpdateState = UpdateState.CREATE;
-  accountCategory!: AccountCategory;
-  accountCategoryForm!: FormGroup;
+  postingGroup!: PostingGroup;
+  postingGroupForm!: FormGroup;
   descriptionEnabled = true;
 
   //Icons
@@ -69,7 +69,7 @@ export class AccountCategoryDetailComponent implements OnInit {
   ]);
 
   constructor(
-    private accountCategoryService: AccountCategoryService,
+    private postingGroupService: PostingGroupService,
     private formBuilder: FormBuilder,
     private alertService: AlertService,
     private confirmationModalService: ConfirmationModalService,
@@ -83,7 +83,7 @@ export class AccountCategoryDetailComponent implements OnInit {
       },
     });
 
-    this.accountCategoryForm = this.formBuilder.group({
+    this.postingGroupForm = this.formBuilder.group({
       description: [
         { value: '', disabled: !this.descriptionEnabled },
         Validators.required,
@@ -91,49 +91,35 @@ export class AccountCategoryDetailComponent implements OnInit {
     });
   }
 
-  setState(state: UpdateState, accountCategory?: AccountCategory) {
+  setState(state: UpdateState, postingGroup?: PostingGroup) {
     this.state = state;
     this.screenController.setEnabledStatus(
-      this.accountCategoryForm,
+      this.postingGroupForm,
       'description',
       this.state
     );
-    if (accountCategory) {
-      this.accountCategory = accountCategory;
-      this.accountCategoryForm.patchValue({
-        description: accountCategory.description,
+    if (postingGroup) {
+      this.postingGroup = postingGroup;
+      this.postingGroupForm.patchValue({
+        description: postingGroup.description,
       });
     }
     if (this.state === UpdateState.CREATE) {
-      this.accountCategoryForm.reset();
+      this.postingGroupForm.reset();
       this.descriptionInput.nativeElement.focus();
     }
   }
 
   setStateToUpdate() {
-    this.crudStateService.update(this.accountCategory);
-  }
-
-  delete() {
-    this.accountCategoryService.delete(this.accountCategory).subscribe({
-      next: (data) => {
-        this.alertService.success('Eliminado com sucesso.');
-        this.crudStateService.create();
-        this.accountCategoryService.refreshList();
-      },
-      error: (error) => {
-        this.alertService.danger('Erro ao eliminar categoria de conta');
-        console.log(error);
-      },
-    });
+    this.crudStateService.update(this.postingGroup);
   }
 
   confirmDelete() {
     this.confirmationModalService
       .show(
-        'Eliminar Categoria de Conta',
+        'Eliminar Agrupador',
         `Deseja realmente eliminar
-        ${this.accountCategory.description}?`
+        ${this.postingGroup.description}?`
       )
       .pipe(take(1))
       .subscribe({
@@ -145,36 +131,50 @@ export class AccountCategoryDetailComponent implements OnInit {
       });
   }
 
+  delete() {
+    this.postingGroupService.delete(this.postingGroup).subscribe({
+      next: (data) => {
+        this.alertService.success('Eliminado com sucesso.');
+        this.crudStateService.create();
+        this.postingGroupService.refreshList();
+      },
+      error: (error) => {
+        this.alertService.danger('Erro ao eliminar agrupador');
+        console.log(error);
+      },
+    });
+  }
+
   createOrUpdate() {
-    const description =
-      this.accountCategoryForm.get('description')?.value ?? '';
+    const description = this.postingGroupForm.get('description')?.value ?? '';
+
     if (this.state === UpdateState.CREATE) {
-      this.accountCategoryService.create(description).subscribe({
+      this.postingGroupService.create({ description: description }).subscribe({
         next: (data) => {
-          this.alertService.success('Criado com sucesso.');
+          this.alertService.success('Agrupador criado com sucesso.');
           this.crudStateService.create();
-          this.accountCategoryService.refreshList();
+          this.postingGroupService.refreshList();
         },
         error: (error) => {
-          this.alertService.danger('Erro ao criar categoria de conta');
+          this.alertService.danger('Erro ao criar agrupador');
           console.log(error);
         },
       });
     } else if (this.state === UpdateState.UPDATE) {
-      const accountCategoryForUpdate: AccountCategory = {
-        id: this.accountCategory.id,
+      const postingGroupForUpdate: PostingGroup = {
+        id: this.postingGroup.id,
         description: description,
-        familyId: this.accountCategory.familyId,
+        familyId: this.postingGroup.familyId,
       };
 
-      this.accountCategoryService.edit(accountCategoryForUpdate).subscribe({
+      this.postingGroupService.edit(postingGroupForUpdate).subscribe({
         next: (data) => {
-          this.alertService.success('Alterado com sucesso.');
+          this.alertService.success('Agrupador alterado com sucesso.');
           this.crudStateService.create();
-          this.accountCategoryService.refreshList();
+          this.postingGroupService.refreshList();
         },
         error: (error) => {
-          this.alertService.danger('Erro ao alterar categoria de conta');
+          this.alertService.danger('Erro ao alterar agrupador');
           console.log(error);
         },
       });

@@ -1,8 +1,9 @@
-import { AccountCategoryStateService } from './../../services/account-category-state.service';
-import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
-import { AccountCategoryService } from './../../services/account-category.service';
 import { Observable, tap } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
+
+import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
+import { CrudStateService } from './../../../../shared/services/crud-state.service';
+import { AccountCategoryService } from './../../services/account-category.service';
 import {
   AccountCategories,
   AccountCategory,
@@ -21,7 +22,7 @@ export class AccountCategoryListComponent implements OnInit {
 
   constructor(
     private accountCategoryService: AccountCategoryService,
-    private accountCategoryStateService: AccountCategoryStateService
+    private crudStateService: CrudStateService
   ) {}
 
   ngOnInit(): void {
@@ -34,10 +35,10 @@ export class AccountCategoryListComponent implements OnInit {
   }
 
   new() {
-    this.accountCategoryStateService.create();
+    this.crudStateService.create();
   }
 
   show(accountCategory: AccountCategory) {
-    this.accountCategoryStateService.show(accountCategory);
+    this.crudStateService.show(accountCategory);
   }
 }
