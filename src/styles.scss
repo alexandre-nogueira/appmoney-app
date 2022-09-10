@@ -33,9 +33,19 @@ body {
     overflow-y: auto;
     max-height: 50vh;
   }
-
 }
 
+@media screen and (max-width: 767px){
+  .col-sm-mt-2 {
+    margin-top: 0.5rem;
+  }
+}
+
+@media screen and (max-width: 991px){
+  .col-md-mt-2 {
+    margin-top: 0.5rem;
+  }
+}
 
 .full-height{
   height: 100%;

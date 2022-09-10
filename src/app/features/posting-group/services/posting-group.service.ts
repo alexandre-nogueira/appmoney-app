@@ -20,6 +20,7 @@ export class PostingGroupService implements CrudService {
       },
     });
   }
+
   getList(): Observable<PostingGroups> {
     this.refreshList();
     return this.postingGroups$.asObservable();

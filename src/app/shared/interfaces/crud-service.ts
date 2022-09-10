@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs';
 export declare interface CrudService {
-  refreshList(): void;
+  refreshList(args?: string[]): void;
 
-  getList(): Observable<any>;
+  getList(args?: string[]): Observable<any>;
 
   getSingle(id: number): Observable<any>;
 

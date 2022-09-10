@@ -1,0 +1,146 @@
+<div class="row">
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="card shadow p-2">
+      <div class="card-body">
+        <div class="card-text">
+          <div class="row">
+            <form [formGroup]="accountForm">
+              <div class="row" *ngIf="account?.user">
+                <div class="col-2">
+                  <fa-icon
+                    *ngIf="!account.active"
+                    [icon]="faLock"
+                    class="text-secondary"
+                  ></fa-icon>
+                </div>
+                <div class="col-10 text-end">
+                  <fa-icon
+                    *ngIf="!isMyAccount(account)"
+                    [icon]="faPeopleGroup"
+                    class="text-warning me-2"
+                  ></fa-icon>
+                  <span
+                    class="badge rounded-pill"
+                    [class]="getBabdgeUserBgColor(account)"
+                    >{{ account?.user?.firstName }}
+                    {{ account?.user?.lastName }}</span
+                  >
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col-lg-3 col-md-12 col-sm-12">
+                  <div class="form-check form-switch">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      role="switch"
+                      id="active"
+                      formControlName="active"
+                    />
+                    <label class="form-check-label" for="active"
+                      >Conta ativa</label
+                    >
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-12 col-sm-12 col-md-mt-2">
+                  <div class="form-check form-switch">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      role="switch"
+                      id="privateAccount"
+                      formControlName="privateAccount"
+                    />
+                    <label class="form-check-label" for="privateAccount"
+                      >Conta privada</label
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-lg-7 col-md-12 col-sm-12">
+                  <label for="description" class="form-label">Descrição</label>
+                  <input
+                    #descriptionInput
+                    type="text"
+                    class="form-control"
+                    id="description"
+                    formControlName="description"
+                  />
+                  <form-message
+                    message="Descrição obrigatória"
+                    *ngIf="
+                  accountForm.get('description')?.errors?.['required'] &&
+                  accountForm.get('description')?.touched"
+                  ></form-message>
+                </div>
+                <div class="col-lg-5 col-md-10 col-sm-12 col-md-mt-2">
+                  <label for="accountCategoryId" class="form-label"
+                    >Categoria de conta</label
+                  >
+                  <div
+                    *ngIf="accountCategoryList$ | async as accountCategoryList"
+                  >
+                    <select
+                      class="form-select"
+                      formControlName="accountCategory"
+                      id="accountCategory"
+                    >
+                      <option
+                        *ngFor="let accountCategory of accountCategoryList"
+                        [value]="accountCategory.id"
+                      >
+                        {{ accountCategory.description }}
+                      </option>
+                    </select>
+                  </div>
+                  <form-message
+                    message="Categoria de conta obrigatória"
+                    *ngIf="
+                  accountForm.get('accountCategoryId')?.errors?.['required'] &&
+                  accountForm.get('accountCategoryId')?.touched"
+                  ></form-message>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="row mt-3">
+            <div class="col-12 text-end">
+              <button
+                class="btn btn-danger"
+                (click)="confirmDelete()"
+                *ngIf="
+                  screenController.getFieldStatus('deleteButton', this.state) &&
+                  isMyAccount(account)
+                "
+              >
+                <fa-icon [icon]="faTrash"></fa-icon>
+              </button>
+
+              <button
+                class="btn btn-secondary ms-2"
+                (click)="setStateToUpdate()"
+                *ngIf="
+                  screenController.getFieldStatus('editButton', this.state) &&
+                  isMyAccount(account)
+                "
+              >
+                <fa-icon [icon]="faPenToSquare"></fa-icon>
+              </button>
+              <button
+                class="btn btn-primary ms-2"
+                (click)="createOrUpdate()"
+                [disabled]="!accountForm.valid"
+                *ngIf="
+                  screenController.getFieldStatus('saveButton', this.state)
+                "
+              >
+                <fa-icon [icon]="faFloppyDisk"></fa-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

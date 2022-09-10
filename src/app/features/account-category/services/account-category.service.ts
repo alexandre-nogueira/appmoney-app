@@ -35,9 +35,9 @@ export class AccountCategoryService implements CrudService {
     return this.httpClient.get<AccountCategory>(`${API}/accountCategory/${id}`);
   }
 
-  create(description: string) {
+  create(accountCategory: AccountCategory) {
     return this.httpClient.post(`${API}/accountCategory`, {
-      description: description,
+      description: accountCategory.description,
     });
   }
 

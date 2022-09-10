@@ -149,35 +149,37 @@ export class AccountCategoryDetailComponent implements OnInit {
     const description =
       this.accountCategoryForm.get('description')?.value ?? '';
     if (this.state === UpdateState.CREATE) {
-      this.accountCategoryService.create(description).subscribe({
-        next: (data) => {
-          this.alertService.success('Criado com sucesso.');
-          this.crudStateService.create();
-          this.accountCategoryService.refreshList();
-        },
-        error: (error) => {
-          this.alertService.danger('Erro ao criar categoria de conta');
-          console.log(error);
-        },
-      });
+      this.accountCategoryService
+        .create({ description: description })
+        .subscribe({
+          next: () => {
+            this.alertService.success('Criado com sucesso.');
+            this.crudStateService.create();
+            this.accountCategoryService.refreshList();
+          },
+          error: (error) => {
+            this.alertService.danger('Erro ao criar categoria de conta');
+            console.log(error);
+          },
+        });
     } else if (this.state === UpdateState.UPDATE) {
-      const accountCategoryForUpdate: AccountCategory = {
-        id: this.accountCategory.id,
-        description: description,
-        familyId: this.accountCategory.familyId,
-      };
-
-      this.accountCategoryService.edit(accountCategoryForUpdate).subscribe({
-        next: (data) => {
-          this.alertService.success('Alterado com sucesso.');
-          this.crudStateService.create();
-          this.accountCategoryService.refreshList();
-        },
-        error: (error) => {
-          this.alertService.danger('Erro ao alterar categoria de conta');
-          console.log(error);
-        },
-      });
+      this.accountCategoryService
+        .edit({
+          id: this.accountCategory.id,
+          description: description,
+          familyId: this.accountCategory.familyId,
+        })
+        .subscribe({
+          next: () => {
+            this.alertService.success('Alterado com sucesso.');
+            this.crudStateService.create();
+            this.accountCategoryService.refreshList();
+          },
+          error: (error) => {
+            this.alertService.danger('Erro ao alterar categoria de conta');
+            console.log(error);
+          },
+        });
     }
   }
 }

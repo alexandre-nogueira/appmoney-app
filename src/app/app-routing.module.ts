@@ -47,6 +47,11 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'account',
+    loadChildren: () =>
+      import('./features/account/account.module').then((m) => m.AccountModule),
+  },
+  {
     path: '**',
     component: PageNotFoundComponent,
   },

@@ -23,7 +23,14 @@
           >
         </li>
         <li class="nav-item" *ngIf="isLogged">
-          <!-- <li class="nav-item" loggedOnly> -->
+          <a
+            class="nav-link"
+            routerLinkActive="text=secondary"
+            routerLink="pricing"
+            >Orçamento</a
+          >
+        </li>
+        <li class="nav-item" *ngIf="isLogged">
           <a
             class="nav-link"
             routerLinkActive="text=secondary"
@@ -67,7 +74,9 @@
                 >Agrupadores</a
               >
             </li>
-            <li><a class="dropdown-item">Contas</a></li>
+            <li>
+              <a class="dropdown-item" routerLink="/account">Contas</a>
+            </li>
           </ul>
         </li>
       </ul>

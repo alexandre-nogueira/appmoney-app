@@ -20,8 +20,9 @@ export class PendingInvitationsListComponent implements OnInit {
   ngOnInit(): void {
     this.pendingInvitations$ = this.familyService.getPendingInvitations().pipe(
       tap({
-        error: () => (this.resolved = true),
-        complete: () => (this.resolved = true),
+        next: () => (this.resolved = true),
+        // error: () => (this.resolved = true),
+        // complete: () => (this.resolved = true),
       })
     );
   }

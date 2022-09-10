@@ -1,0 +1,89 @@
+<div *ngIf="accountList$ | async as accountList; else empty">
+  <div *ngIf="accountList.length > 0; else empty">
+    <div class="row mt-1">
+      <div class="col-lg-9 col-md-10 col-sm-12">
+        <div class="form-check form-switch">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            id="getFamilyAccounts"
+            [(ngModel)]="getFamilyAccounts"
+            (ngModelChange)="getFamilyAccountsChanged($event)"
+          />
+          <label class="form-check-label" for="getFamilyAccounts"
+            >Mostrar Contas da família</label
+          >
+        </div>
+      </div>
+    </div>
+    <div class="row mt-1">
+      <div class="col-lg-9 col-md-10 col-sm-12">
+        <div class="form-check form-switch">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            id="getInactiveAccounts"
+            [(ngModel)]="getInactiveAccounts"
+            (ngModelChange)="getInactiveAccountsChanged($event)"
+          />
+          <label class="form-check-label" for="getInactiveAccounts"
+            >Mostrar contas inativas</label
+          >
+        </div>
+      </div>
+    </div>
+    <div class="row text-center mt-2">
+      <div class="col-lg-9 col-md-10 col-sm-12">
+        <input
+          type="text"
+          placeholder="filtrar"
+          class="form-control"
+          [(ngModel)]="filterText"
+        />
+      </div>
+    </div>
+
+    <div class="row crudTableContainer mt-1">
+      <div class="col-12">
+        <table class="table table-hover">
+          <tbody>
+            <tr
+              class="crudTableRow"
+              *ngFor="let account of accountList | filterTable: filterText"
+            >
+              <td (click)="show(account)">
+                <a>
+                  <fa-icon
+                    *ngIf="!isMyAccount(account)"
+                    [icon]="faPeopleGroup"
+                    class="text-warning me-1"
+                  ></fa-icon>
+                  <fa-icon
+                    *ngIf="!account.active"
+                    [icon]="faLock"
+                    class="text-secondary"
+                  ></fa-icon>
+
+                  {{ account.description }}
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #empty>
+  <div *ngIf="!resolved" class="container mt-3">
+    <loading></loading>
+  </div>
+  <div *ngIf="resolved" class="container mt-3">
+    <div class="row text-center">
+      <h4 class="display-6">Não há contas cadastradas</h4>
+    </div>
+  </div>
+</ng-template>
