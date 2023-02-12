@@ -1,0 +1,41 @@
+<div *ngIf="postingList$ | async as postingList; else empty">
+  <div *ngIf="postingList.meta.total > 0; else empty">
+    <div class="row">
+      <div class="col-12">
+        <table class="table table-hover table-striped">
+          <thead>
+            <th scope="col" class="fontSmall">Descrição</th>
+            <th scope="col" class="fontSmall">Valor</th>
+            <th scope="col" class="fontSmall">Categoria</th>
+            <th scope="col" class="fontSmall">Agrupador</th>
+            <th scope="col" class="fontSmall">Lançamento</th>
+            <th scope="col" class="fontSmall">Pagamento</th>
+            <th scope="col" class="fontSmall">Conta</th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let posting of postingList.data" class="fontSmall">
+              <td>{{ posting.description }}</td>
+              <td>{{ posting.value | currency: 'BRL' }}</td>
+              <td>{{ posting.postingCategory?.description }}</td>
+              <td>{{ posting.postingGroup?.description }}</td>
+              <td>{{ posting.dueDate | date: 'dd/MM/YYYY' }}</td>
+              <td>{{ posting.paymentDate | date: 'dd/MM/YYYY' }}</td>
+              <td>{{ posting.account?.description }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #empty>
+  <div *ngIf="!resolved" class="container mt-3">
+    <loading></loading>
+  </div>
+  <div *ngIf="resolved" class="container mt-3">
+    <div class="row text-center">
+      <h4 class="display-6">Não há lançamentos</h4>
+    </div>
+  </div>
+</ng-template>

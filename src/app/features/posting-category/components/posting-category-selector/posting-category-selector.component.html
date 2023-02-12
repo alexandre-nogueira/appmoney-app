@@ -1,0 +1,19 @@
+<div *ngIf="postingCategoryList$ | async as postingCategoryList">
+  <label for="postingCateegory" class="form-label"
+    >Categoria de lançamento</label
+  >
+  <select
+    class="form-select"
+    [ngModel]="selectedId"
+    id="postingCategory"
+    (ngModelChange)="onPostingCategorySelected($event)"
+  >
+    <option value="0">Selecione...</option>
+    <option
+      *ngFor="let postingCategory of postingCategoryList"
+      [value]="postingCategory.id"
+    >
+      {{ postingCategory.description }}
+    </option>
+  </select>
+</div>

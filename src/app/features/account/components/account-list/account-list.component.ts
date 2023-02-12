@@ -1,12 +1,12 @@
-import { Router, ActivatedRoute, Params, NavigationEnd } from '@angular/router';
-import { AccountService } from './../../services/account.service';
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { faPeopleGroup, faLock } from '@fortawesome/free-solid-svg-icons';
 import { Account, Accounts } from './../../interfaces/account';
 import { CrudStateService } from 'src/app/shared/services/crud-state.service';
 import { AccountSearchParams } from '../../enums/accountSearchParams';
 import { RouteUtil } from 'src/app/shared/utils/route/route-util';
+import { AccountService } from './../../services/account.service';
 
 @Component({
   selector: 'account-list',
@@ -31,16 +31,41 @@ export class AccountListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getInitialAccountList();
+
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.updateSerchParameters();
 
         this.accountService.refreshList(
-          RouteUtil.prepareRouteParams(this.activatedRoute, [])
+          // RouteUtil.prepareQSParams(this.activatedRoute.snapshot.params, [])
+          this.activatedRoute.snapshot.params
         );
       }
     });
-    this.refreshAccountList();
+  }
+
+  getInitialAccountList() {
+    this.updateSerchParameters();
+
+    this.accountList$ = this.accountService
+      .getList(
+        // RouteUtil.prepareQSParams(this.activatedRoute.snapshot.params, [])
+        this.activatedRoute.snapshot.params
+      )
+      .pipe(
+        tap({
+          next: () => {
+            this.resolved = true;
+          },
+          complete: () => {
+            this.resolved = true;
+          },
+          error: () => {
+            this.resolved = true;
+          },
+        })
+      );
   }
 
   updateSerchParameters() {
@@ -67,26 +92,6 @@ export class AccountListComponent implements OnInit {
     }
   }
 
-  refreshAccountList() {
-    this.updateSerchParameters();
-
-    this.accountList$ = this.accountService
-      .getList(RouteUtil.prepareRouteParams(this.activatedRoute, []))
-      .pipe(
-        tap({
-          next: () => {
-            this.resolved = true;
-          },
-          complete: () => {
-            this.resolved = true;
-          },
-          error: () => {
-            this.resolved = true;
-          },
-        })
-      );
-  }
-
   show(account: Account) {
     this.crudStateService.show(account);
   }
@@ -96,22 +101,27 @@ export class AccountListComponent implements OnInit {
   }
 
   getFamilyAccountsChanged(value: boolean) {
-    const params = this.accountService.prepareRouteParams(this.activatedRoute, {
-      getFamilyAccounts: value,
-    });
-    this.accountService.refreshList(params);
+    const newParams = RouteUtil.prepareQSParams(
+      this.activatedRoute.snapshot.params,
+      {
+        [AccountSearchParams.getFamilyAccounts]: value,
+      }
+    );
+    this.accountService.refreshList(newParams);
 
-    const qs = RouteUtil.formatRouteParams(params);
-    this.router.navigate(['/account', qs]);
+    this.router.navigate(['/account', newParams]);
   }
 
   getInactiveAccountsChanged(value: boolean) {
-    const params = this.accountService.prepareRouteParams(this.activatedRoute, {
-      getInactiveAccounts: value,
-    });
-    this.accountService.refreshList(params);
+    const newParams = RouteUtil.prepareQSParams(
+      this.activatedRoute.snapshot.params,
+      {
+        [AccountSearchParams.getInactiveAccounts]: value,
+      }
+    );
 
-    const qs = RouteUtil.formatRouteParams(params);
-    this.router.navigate(['/account', qs]);
+    this.accountService.refreshList(newParams);
+
+    this.router.navigate(['/account', newParams]);
   }
 }

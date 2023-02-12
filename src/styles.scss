@@ -61,6 +61,14 @@ a:hover {
   cursor:pointer;
  }
 
- tr.crudTableRow:hover{
+tr.crudTableRow:hover{
   cursor: pointer;
+ }
+
+ tr.fontSmall{
+  font-size: 11px;
+ }
+
+ th.fontSmall{
+  font-size: 13px;
  }

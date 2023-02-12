@@ -1,13 +1,13 @@
 import { UserService } from 'src/app/core/auth/user/user.service';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject, BehaviorSubject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 import { environment } from './../../../../environments/environment';
 import { Account, Accounts } from './../interfaces/account';
 import { AccountSearchParams } from './../enums/accountSearchParams';
 import { CrudService } from 'src/app/shared/interfaces/crud-service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 
 const API = environment.apiURL;
 
@@ -22,31 +22,22 @@ export class AccountService implements CrudService {
     private userService: UserService
   ) {}
 
-  refreshList(args: string[]): void {
-    let httpParams: HttpParams = new HttpParams({
-      fromObject: {
-        getInactiveAccounts: false,
-      },
-    });
+  refreshList(params: Params): void {
+    let httpParams = new HttpParams();
     let urlComplement = 'userAccounts';
 
-    args.forEach((arg) => {
-      const argument = JSON.parse(arg);
-      Object.keys(argument).some((field) => {
-        if (field === AccountSearchParams.getFamilyAccounts) {
-          if (argument[field] === 'true') {
-            urlComplement = 'familyAccounts';
-          }
+    Object.keys(params).some((field) => {
+      if (field === AccountSearchParams.getFamilyAccounts) {
+        if (params[field] === 'true') {
+          urlComplement = 'familyAccounts';
         }
-        if (field === AccountSearchParams.getInactiveAccounts) {
-          if (argument[field] === 'true') {
-            httpParams = httpParams.set(
-              AccountSearchParams.getInactiveAccounts,
-              true
-            );
-          }
-        }
-      });
+      }
+      if (field === AccountSearchParams.getInactiveAccounts) {
+        httpParams = httpParams.set(
+          AccountSearchParams.getInactiveAccounts,
+          params[field]
+        );
+      }
     });
 
     this.httpClient
@@ -61,8 +52,8 @@ export class AccountService implements CrudService {
       });
   }
 
-  getList(args: string[]): Observable<Accounts> {
-    this.refreshList(args);
+  getList(params: Params): Observable<Accounts> {
+    this.refreshList(params);
     return this._accounts$.asObservable();
   }
 
@@ -96,23 +87,5 @@ export class AccountService implements CrudService {
       return account.user.id === this.userService.getUserData()?.id;
     }
     return false;
-  }
-
-  public prepareRouteParams(activatedRoute: ActivatedRoute, params: any) {
-    const retParams: string[] = [];
-
-    //Preserve params of the activated route.
-    Object.keys(activatedRoute.snapshot.params).some((key) => {
-      if (Object.keys(params).filter((param) => param === key).length === 0) {
-        retParams.push(`{"${key}": "${activatedRoute.snapshot.params[key]}"}`);
-      }
-    });
-
-    //Add changed params.
-    Object.keys(params).some((key) => {
-      retParams.push(`{"${key}":"${params[key]}"}`);
-    });
-
-    return retParams;
   }
 }

@@ -8,12 +8,14 @@ import { PostingGroupRoutingModule } from './posting-group-routing.module';
 import { PostingGroupMainComponent } from './components/posting-group-main/posting-group-main.component';
 import { PostingGroupListComponent } from './components/posting-group-list/posting-group-list.component';
 import { PostingGroupDetailComponent } from './components/posting-group-detail/posting-group-detail.component';
+import { PostingGroupSelectorComponent } from './components/posting-group-selector/posting-group-selector.component';
 
 @NgModule({
   declarations: [
     PostingGroupMainComponent,
     PostingGroupListComponent,
-    PostingGroupDetailComponent
+    PostingGroupDetailComponent,
+    PostingGroupSelectorComponent,
   ],
   imports: [
     CommonModule,
@@ -23,5 +25,6 @@ import { PostingGroupDetailComponent } from './components/posting-group-detail/p
     ReactiveFormsModule,
     FormsModule,
   ],
+  exports: [PostingGroupSelectorComponent],
 })
 export class PostingGroupModule {}

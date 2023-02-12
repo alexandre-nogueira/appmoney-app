@@ -1,35 +1,48 @@
-import { ActivatedRoute, Params } from '@angular/router';
+import { HttpParams } from '@angular/common/http';
+import { Params } from '@angular/router';
 
 export abstract class RouteUtil {
-  public static prepareRouteParams(
-    activatedRoute: ActivatedRoute,
-    params: any
-  ) {
-    const retParams: string[] = [];
+  public static prepareQSParams(
+    currentParams: Params,
+    modifiedParams: any
+  ): Params {
+    const params: Params = {};
 
     //Preserve params of the activated route.
-    Object.keys(activatedRoute.snapshot.params).some((key) => {
-      if (Object.keys(params).filter((param) => param === key).length === 0) {
-        retParams.push(`{"${key}": "${activatedRoute.snapshot.params[key]}"}`);
+    Object.keys(currentParams).some((key) => {
+      if (
+        Object.keys(modifiedParams).filter((param) => param === key).length ===
+        0
+      ) {
+        params[key] = currentParams[key];
       }
     });
 
-    //Add changed params.
-    Object.keys(params).some((key) => {
-      retParams.push(`{"${key}":"${params[key]}"}`);
+    //Add modified params
+    Object.keys(modifiedParams).some((key) => {
+      if (modifiedParams[key] !== null) {
+        params[key] = modifiedParams[key];
+      }
     });
 
-    return retParams;
+    return params;
   }
 
-  public static formatRouteParams(unformatedParams: string[]): Params {
-    const qs: Params = {};
-    unformatedParams.forEach((param) => {
-      const paramObj = JSON.parse(param);
-      Object.keys(paramObj).some((key) => {
-        qs[key] = paramObj[key];
-      });
+  /**
+   * @Description
+   * Creates an HttpParams object for http calls, based on an stringfied json objects
+   * @param args
+   * Array os stringfied JSON objects, each object atribute represents a parameter for the http call
+   * Example: {"dateFrom":"2022-10-21", "dateTo":"2022-11-01"}
+   * @returns
+   */
+  public static prepareHttpParams(params: Params): HttpParams {
+    let httpParams = new HttpParams();
+
+    Object.keys(params).some((field) => {
+      httpParams = httpParams.set(field, params[field]);
     });
-    return qs;
+
+    return httpParams;
   }
 }

@@ -8,12 +8,14 @@ import { PostingCategoryRoutingModule } from './posting-category-routing.module'
 import { PostingCategoryMainComponent } from './components/posting-category-main/posting-category-main.component';
 import { PostingCategoryListComponent } from './components/posting-category-list/posting-category-list.component';
 import { PostingCategoryDetailComponent } from './components/posting-category-detail/posting-category-detail.component';
+import { PostingCategorySelectorComponent } from './components/posting-category-selector/posting-category-selector.component';
 
 @NgModule({
   declarations: [
     PostingCategoryMainComponent,
     PostingCategoryListComponent,
     PostingCategoryDetailComponent,
+    PostingCategorySelectorComponent,
   ],
   imports: [
     CommonModule,
@@ -23,5 +25,6 @@ import { PostingCategoryDetailComponent } from './components/posting-category-de
     ReactiveFormsModule,
     FormsModule,
   ],
+  exports: [PostingCategorySelectorComponent],
 })
 export class PostingCategoryModule {}

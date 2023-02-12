@@ -1,0 +1,14 @@
+<div *ngIf="accountList$ | async as accountList">
+  <label for="account" class="form-label">Conta</label>
+  <select
+    class="form-select"
+    [ngModel]="selectedId"
+    id="account"
+    (ngModelChange)="onAccountSelected($event)"
+  >
+    <option value="0">Selecione...</option>
+    <option *ngFor="let account of accountList" [value]="account.id">
+      {{ account.description }}
+    </option>
+  </select>
+</div>

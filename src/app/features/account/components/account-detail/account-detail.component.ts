@@ -19,12 +19,7 @@ import { Account } from '../../interfaces/account';
 import { AlertService } from 'src/app/shared/components/alert/alert.service';
 import { ConfirmationModalService } from 'src/app/shared/components/confirmation-modal/confirmation-modal.service';
 import { CrudStateService } from 'src/app/shared/services/crud-state.service';
-import {
-  AccountCategories,
-  AccountCategory,
-} from 'src/app/features/account-category/interfaces/account-category';
-import { User } from 'src/app/core/auth/user/user';
-import { AccountSearchParams } from '../../enums/accountSearchParams';
+import { AccountCategories } from 'src/app/features/account-category/interfaces/account-category';
 
 @Component({
   selector: 'account-detail',
@@ -263,7 +258,7 @@ export class AccountDetailComponent implements OnInit {
 
   refreshAccountList() {
     this.accountService.refreshList(
-      RouteUtil.prepareRouteParams(this.activatedRoute, [])
+      RouteUtil.prepareQSParams(this.activatedRoute.snapshot.params, [])
     );
   }
 
@@ -272,7 +267,7 @@ export class AccountDetailComponent implements OnInit {
       if (this.accountService.isMyAccount(account)) {
         return 'bg-primary';
       } else {
-        return 'bg-secondary';
+        return 'bg-warning';
       }
     }
     return '';

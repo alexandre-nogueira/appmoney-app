@@ -8,12 +8,14 @@ import { AccountRoutingModule } from './account-routing.module';
 import { AccountListComponent } from './components/account-list/account-list.component';
 import { AccountMainComponent } from './components/account-main/account-main.component';
 import { AccountDetailComponent } from './components/account-detail/account-detail.component';
+import { AccountSelectorComponent } from './components/account-selector/account-selector.component';
 
 @NgModule({
   declarations: [
     AccountListComponent,
     AccountMainComponent,
-    AccountDetailComponent
+    AccountDetailComponent,
+    AccountSelectorComponent,
   ],
   imports: [
     CommonModule,
@@ -23,5 +25,6 @@ import { AccountDetailComponent } from './components/account-detail/account-deta
     SharedModule,
     FontAwesomeModule,
   ],
+  exports: [AccountSelectorComponent],
 })
 export class AccountModule {}

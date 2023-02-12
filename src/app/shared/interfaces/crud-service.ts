@@ -1,8 +1,9 @@
+import { Params } from '@angular/router';
 import { Observable } from 'rxjs';
 export declare interface CrudService {
-  refreshList(args?: string[]): void;
+  refreshList(params?: Params): void;
 
-  getList(args?: string[]): Observable<any>;
+  getList(params?: Params): Observable<any>;
 
   getSingle(id: number): Observable<any>;
 

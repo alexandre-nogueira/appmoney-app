@@ -26,6 +26,11 @@ const routes: Routes = [
       import('./pages/family/family.module').then((m) => m.FamilyModule),
   },
   {
+    path: 'posting',
+    loadChildren: () =>
+      import('./features/posting/posting.module').then((m) => m.PostingModule),
+  },
+  {
     path: 'accountCategory',
     loadChildren: () =>
       import('./features/account-category/account-category.module').then(

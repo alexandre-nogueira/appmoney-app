@@ -1,12 +1,12 @@
+import { Component, OnInit } from '@angular/core';
+import { Observable, tap } from 'rxjs';
+import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import { CrudStateService } from './../../../../shared/services/crud-state.service';
 import { PostingCategoryService } from './../../services/posting-category.service';
-import { Observable, tap } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
 import {
   PostingCategories,
   PostingCategory,
 } from '../../interfaces/posting-category';
-import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'posting-category-list',
