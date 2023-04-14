@@ -1,8 +1,11 @@
 <div *ngIf="postingGroupList$ | async as postingGroupList">
-  <label for="postingGroup" class="form-label">Agrupador de lançamento</label>
+  <label for="postingGroup" [class]="layoutUtil.getClassForLabelSize(this.size)"
+    >Agrupador de lançamento</label
+  >
   <select
-    class="form-select"
-    [ngModel]="selectedId"
+    [class]="layoutUtil.getClassForSelectSize(this.size)"
+    [(ngModel)]="selectedId"
+    [disabled]="disabled"
     id="postingGroup"
     (ngModelChange)="onPostingGroupSelected($event)"
   >

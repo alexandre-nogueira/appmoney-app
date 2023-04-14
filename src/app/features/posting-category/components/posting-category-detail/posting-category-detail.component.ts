@@ -13,6 +13,7 @@ import { AlertService } from 'src/app/shared/components/alert/alert.service';
 import { ConfirmationModalService } from 'src/app/shared/components/confirmation-modal/confirmation-modal.service';
 import { CrudStateService } from 'src/app/shared/services/crud-state.service';
 import { take } from 'rxjs/operators';
+import { FieldType } from 'src/app/shared/enums/FieldType';
 
 @Component({
   selector: 'posting-category-detail',
@@ -36,6 +37,7 @@ export class PostingCategoryDetailComponent implements OnInit {
   screenController = new ScreenController([
     {
       fieldName: 'saveButton',
+      fieldType: FieldType.BUTTON,
       values: [
         { state: UpdateState.CREATE, enable: true },
         { state: UpdateState.SHOW, enable: false },
@@ -44,6 +46,7 @@ export class PostingCategoryDetailComponent implements OnInit {
     },
     {
       fieldName: 'editButton',
+      fieldType: FieldType.BUTTON,
       values: [
         { state: UpdateState.CREATE, enable: false },
         { state: UpdateState.SHOW, enable: true },
@@ -52,6 +55,7 @@ export class PostingCategoryDetailComponent implements OnInit {
     },
     {
       fieldName: 'deleteButton',
+      fieldType: FieldType.BUTTON,
       values: [
         { state: UpdateState.CREATE, enable: false },
         { state: UpdateState.SHOW, enable: true },
@@ -60,6 +64,7 @@ export class PostingCategoryDetailComponent implements OnInit {
     },
     {
       fieldName: 'description',
+      fieldType: FieldType.INPUT,
       values: [
         { state: UpdateState.CREATE, enable: true },
         { state: UpdateState.SHOW, enable: false },
@@ -95,7 +100,7 @@ export class PostingCategoryDetailComponent implements OnInit {
     this.state = state;
     this.screenController.setEnabledStatus(
       this.postingCategoryForm,
-      'description',
+      this.screenController.getFieldControl(),
       this.state
     );
     if (postingCategory) {

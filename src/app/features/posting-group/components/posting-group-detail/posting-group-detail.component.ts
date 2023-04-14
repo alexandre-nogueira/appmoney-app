@@ -13,6 +13,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { ScreenController } from 'src/app/shared/utils/screenControl/screen-controller';
 import { take } from 'rxjs';
+import { FieldType } from 'src/app/shared/enums/FieldType';
 
 @Component({
   selector: 'posting-group-detail',
@@ -36,6 +37,7 @@ export class PostingGroupDetailComponent implements OnInit {
   screenController = new ScreenController([
     {
       fieldName: 'saveButton',
+      fieldType: FieldType.BUTTON,
       values: [
         { state: UpdateState.CREATE, enable: true },
         { state: UpdateState.SHOW, enable: false },
@@ -44,6 +46,7 @@ export class PostingGroupDetailComponent implements OnInit {
     },
     {
       fieldName: 'editButton',
+      fieldType: FieldType.BUTTON,
       values: [
         { state: UpdateState.CREATE, enable: false },
         { state: UpdateState.SHOW, enable: true },
@@ -52,6 +55,7 @@ export class PostingGroupDetailComponent implements OnInit {
     },
     {
       fieldName: 'deleteButton',
+      fieldType: FieldType.BUTTON,
       values: [
         { state: UpdateState.CREATE, enable: false },
         { state: UpdateState.SHOW, enable: true },
@@ -60,6 +64,7 @@ export class PostingGroupDetailComponent implements OnInit {
     },
     {
       fieldName: 'description',
+      fieldType: FieldType.INPUT,
       values: [
         { state: UpdateState.CREATE, enable: true },
         { state: UpdateState.SHOW, enable: false },
@@ -95,7 +100,7 @@ export class PostingGroupDetailComponent implements OnInit {
     this.state = state;
     this.screenController.setEnabledStatus(
       this.postingGroupForm,
-      'description',
+      this.screenController.getFieldControl(),
       this.state
     );
     if (postingGroup) {

@@ -1,11 +1,16 @@
 import { FormGroup } from '@angular/forms';
 import { UpdateState } from './../../enums/UpdateState';
-import { ScreenControl } from './screen-control';
+import { ScreenControl, ScreenControls } from './screen-control';
+import { FieldType } from '../../enums/FieldType';
 export class ScreenController {
-  private _fieldControl: Array<ScreenControl>;
+  private _fieldControl: ScreenControls;
 
-  constructor(fieldControl: Array<ScreenControl>) {
+  constructor(fieldControl: ScreenControls) {
     this._fieldControl = fieldControl;
+  }
+
+  getFieldControl(): ScreenControls {
+    return this._fieldControl;
   }
 
   public getFieldStatus(fieldName: string, state: UpdateState) {
@@ -29,11 +34,21 @@ export class ScreenController {
     }
   }
 
-  setEnabledStatus(form: FormGroup, fieldName: string, state: UpdateState) {
-    if (this.getFieldStatus(fieldName, state)) {
-      form.controls[fieldName].enable();
-    } else {
-      form.controls[fieldName].disable();
-    }
+  setEnabledStatus(
+    form: FormGroup,
+    screenController: ScreenControls,
+    state: UpdateState
+  ) {
+    screenController
+      .filter((screenControl) => {
+        return screenControl.fieldType === FieldType.INPUT;
+      })
+      .forEach((screenControl) => {
+        if (this.getFieldStatus(screenControl.fieldName, state)) {
+          form.controls[screenControl.fieldName].enable();
+        } else {
+          form.controls[screenControl.fieldName].disable();
+        }
+      });
   }
 }

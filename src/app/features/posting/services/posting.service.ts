@@ -1,3 +1,4 @@
+import { CrudStateService } from './../../../shared/services/crud-state.service';
 import { PostingDetailComponent } from './../components/posting-detail/posting-detail.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RouteUtil } from 'src/app/shared/utils/route/route-util';
@@ -12,7 +13,8 @@ import { CrudService } from 'src/app/shared/interfaces/crud-service';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Params } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
+import { PostingStatus } from '../enums/posting-status';
 
 const API = environment.apiURL;
 
@@ -22,7 +24,12 @@ const API = environment.apiURL;
 export class PostingService implements CrudService {
   private _postings$ = new Subject<PostingsPaginated>();
 
-  constructor(private httpClient: HttpClient, private modal: NgbModal) {}
+  constructor(
+    private httpClient: HttpClient,
+    private modal: NgbModal,
+    private crudStateService: CrudStateService,
+    private activatedRoute: ActivatedRoute
+  ) {}
 
   refreshList(params: Params): void {
     const httpParams = RouteUtil.prepareHttpParams(params);
@@ -47,26 +54,25 @@ export class PostingService implements CrudService {
   }
 
   create(posting: Posting): Observable<Posting> {
-    return this.httpClient.post<Posting>(`${API}/posting`, {
+    return this.httpClient.post<Posting>(`${API}/posting/create`, {
       accountId: posting.accountId,
       postingCategoryId: posting.postingCategoryId,
       postingGroupId: posting.postingGroupId,
-      status: posting.status,
       description: posting.description,
       value: posting.value,
-      due_date: posting.dueDate,
+      dueDate: posting.dueDate,
+      paymentDate: posting.paymentDate,
     });
   }
 
   edit(posting: Posting): Observable<Posting> {
-    return this.httpClient.patch<Posting>(`${API}/posting`, {
+    return this.httpClient.patch<Posting>(`${API}/posting/${posting.id}`, {
       accountId: posting.accountId,
       postingCategoryId: posting.postingCategoryId,
       postingGroupId: posting.postingGroupId,
-      status: posting.status,
       description: posting.description,
       value: posting.value,
-      due_date: posting.dueDate,
+      dueDate: posting.dueDate,
       paymentDate: posting.paymentDate,
     });
   }
@@ -75,18 +81,22 @@ export class PostingService implements CrudService {
     return this.httpClient.delete<Posting>(`${API}/posting/${posting.id}`);
   }
 
-  pay(posting: Posting): Observable<Posting> {
-    return this.httpClient.patch(`${API}/posting/${posting.id}/pay`, {
-      paymentDate: posting.paymentDate,
-    });
+  restore(posting: Posting): Observable<Posting> {
+    return this.httpClient.get<Posting>(`${API}/posting/${posting.id}/restore`);
   }
 
-  reversePayment(posting: Posting): Observable<Posting> {
-    return this.httpClient.patch(
-      `${API}/posting/${posting.id}/reversePayment`,
-      {}
-    );
-  }
+  // pay(posting: Posting): Observable<Posting> {
+  //   return this.httpClient.patch(`${API}/posting/${posting.id}/pay`, {
+  //     paymentDate: posting.paymentDate,
+  //   });
+  // }
+
+  // reversePayment(posting: Posting): Observable<Posting> {
+  //   return this.httpClient.patch(
+  //     `${API}/posting/${posting.id}/reversePayment`,
+  //     {}
+  //   );
+  // }
 
   createMultiple(massPostings: MassPostings): Observable<MassPostingsReturn> {
     return this.httpClient.post<MassPostingsReturn>(
@@ -98,7 +108,21 @@ export class PostingService implements CrudService {
     );
   }
 
-  openDetailDialog() {
-    const postingDetailModal = this.modal.open(PostingDetailComponent);
+  openDetailDialog(posting?: Posting, routeParams?: Params) {
+    const postingDetailModal = this.modal.open(PostingDetailComponent, {
+      size: 'lg',
+      centered: true,
+    });
+
+    postingDetailModal.componentInstance.routeParams = routeParams;
+
+    // The state must be set here because this "shown" method ensures the modal is fully load
+    postingDetailModal.shown.subscribe(() => {
+      if (posting) {
+        this.crudStateService.show(posting);
+      } else {
+        this.crudStateService.create();
+      }
+    });
   }
 }

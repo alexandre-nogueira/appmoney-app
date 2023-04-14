@@ -11,12 +11,16 @@ import { PostingMainComponent } from './components/posting-main/posting-main.com
 import { PostingListComponent } from './components/posting-list/posting-list.component';
 import { PostingDetailComponent } from './components/posting-detail/posting-detail.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { StatusPipe } from './pipes/status.pipe';
+import { PostingStatusComponent } from './components/posting-status/posting-status.component';
 
 @NgModule({
   declarations: [
     PostingMainComponent,
     PostingListComponent,
     PostingDetailComponent,
+    StatusPipe,
+    PostingStatusComponent,
   ],
   imports: [
     CommonModule,

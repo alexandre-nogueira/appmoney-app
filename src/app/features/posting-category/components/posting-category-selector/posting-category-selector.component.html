@@ -1,10 +1,13 @@
 <div *ngIf="postingCategoryList$ | async as postingCategoryList">
-  <label for="postingCateegory" class="form-label"
+  <label
+    for="postingCateegory"
+    [class]="layoutUtil.getClassForLabelSize(this.size)"
     >Categoria de lançamento</label
   >
   <select
-    class="form-select"
-    [ngModel]="selectedId"
+    [class]="layoutUtil.getClassForSelectSize(this.size)"
+    [(ngModel)]="selectedId"
+    [disabled]="disabled"
     id="postingCategory"
     (ngModelChange)="onPostingCategorySelected($event)"
   >

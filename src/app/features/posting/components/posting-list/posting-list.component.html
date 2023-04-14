@@ -4,6 +4,7 @@
       <div class="col-12">
         <table class="table table-hover table-striped">
           <thead>
+            <th scope="col" class="fontSmall text-center">Status</th>
             <th scope="col" class="fontSmall">Descrição</th>
             <th scope="col" class="fontSmall">Valor</th>
             <th scope="col" class="fontSmall">Categoria</th>
@@ -13,7 +14,16 @@
             <th scope="col" class="fontSmall">Conta</th>
           </thead>
           <tbody>
-            <tr *ngFor="let posting of postingList.data" class="fontSmall">
+            <tr
+              *ngFor="let posting of postingList.data"
+              class="fontSmall crudTableRow"
+              (click)="showDetail(posting)"
+            >
+              <td class="text-center">
+                <posting-status
+                  [status]="posting.status ?? ''"
+                ></posting-status>
+              </td>
               <td>{{ posting.description }}</td>
               <td>{{ posting.value | currency: 'BRL' }}</td>
               <td>{{ posting.postingCategory?.description }}</td>

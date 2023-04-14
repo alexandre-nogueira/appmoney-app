@@ -1,8 +1,11 @@
 <div *ngIf="accountList$ | async as accountList">
-  <label for="account" class="form-label">Conta</label>
+  <label for="account" [class]="layoutUtil.getClassForLabelSize(this.size)"
+    >Conta</label
+  >
   <select
-    class="form-select"
-    [ngModel]="selectedId"
+    [class]="layoutUtil.getClassForSelectSize(this.size)"
+    [(ngModel)]="selectedId"
+    [disabled]="disabled"
     id="account"
     (ngModelChange)="onAccountSelected($event)"
   >

@@ -6,4 +6,5 @@ export enum PostingSearchParams {
   postingCategoryId = 'postingCategoryId',
   page = 'page',
   perPage = 'perPage',
+  status = 'status',
 }

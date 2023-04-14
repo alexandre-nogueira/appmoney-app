@@ -20,6 +20,7 @@ import { AlertService } from 'src/app/shared/components/alert/alert.service';
 import { ConfirmationModalService } from 'src/app/shared/components/confirmation-modal/confirmation-modal.service';
 import { CrudStateService } from 'src/app/shared/services/crud-state.service';
 import { AccountCategories } from 'src/app/features/account-category/interfaces/account-category';
+import { FieldType } from 'src/app/shared/enums/FieldType';
 
 @Component({
   selector: 'account-detail',
@@ -46,6 +47,7 @@ export class AccountDetailComponent implements OnInit {
   screenController = new ScreenController([
     {
       fieldName: 'saveButton',
+      fieldType: FieldType.BUTTON,
       values: [
         { state: UpdateState.CREATE, enable: true },
         { state: UpdateState.SHOW, enable: false },
@@ -54,6 +56,7 @@ export class AccountDetailComponent implements OnInit {
     },
     {
       fieldName: 'editButton',
+      fieldType: FieldType.BUTTON,
       values: [
         { state: UpdateState.CREATE, enable: false },
         { state: UpdateState.SHOW, enable: true },
@@ -62,6 +65,7 @@ export class AccountDetailComponent implements OnInit {
     },
     {
       fieldName: 'deleteButton',
+      fieldType: FieldType.BUTTON,
       values: [
         { state: UpdateState.CREATE, enable: false },
         { state: UpdateState.SHOW, enable: true },
@@ -70,6 +74,7 @@ export class AccountDetailComponent implements OnInit {
     },
     {
       fieldName: 'description',
+      fieldType: FieldType.INPUT,
       values: [
         { state: UpdateState.CREATE, enable: true },
         { state: UpdateState.SHOW, enable: false },
@@ -78,6 +83,7 @@ export class AccountDetailComponent implements OnInit {
     },
     {
       fieldName: 'accountCategory',
+      fieldType: FieldType.INPUT,
       values: [
         { state: UpdateState.CREATE, enable: true },
         { state: UpdateState.SHOW, enable: false },
@@ -86,6 +92,7 @@ export class AccountDetailComponent implements OnInit {
     },
     {
       fieldName: 'privateAccount',
+      fieldType: FieldType.INPUT,
       values: [
         { state: UpdateState.CREATE, enable: true },
         { state: UpdateState.SHOW, enable: false },
@@ -94,6 +101,7 @@ export class AccountDetailComponent implements OnInit {
     },
     {
       fieldName: 'active',
+      fieldType: FieldType.INPUT,
       values: [
         { state: UpdateState.CREATE, enable: true },
         { state: UpdateState.SHOW, enable: false },
@@ -135,22 +143,7 @@ export class AccountDetailComponent implements OnInit {
 
     this.screenController.setEnabledStatus(
       this.accountForm,
-      'description',
-      this.state
-    );
-    this.screenController.setEnabledStatus(
-      this.accountForm,
-      'accountCategory',
-      this.state
-    );
-    this.screenController.setEnabledStatus(
-      this.accountForm,
-      'privateAccount',
-      this.state
-    );
-    this.screenController.setEnabledStatus(
-      this.accountForm,
-      'active',
+      this.screenController.getFieldControl(),
       this.state
     );
 

@@ -2,9 +2,10 @@ import { PostingSearchParams } from './../../enums/postingSearchParams';
 import { RouteUtil } from 'src/app/shared/utils/route/route-util';
 import { PostingService } from './../../services/posting.service';
 import { ActivatedRoute } from '@angular/router';
-import { PostingsPaginated } from './../../interfaces/posting';
+import { Posting, PostingsPaginated } from './../../interfaces/posting';
 import { Observable, tap } from 'rxjs';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { CrudStateService } from 'src/app/shared/services/crud-state.service';
 
 @Component({
   selector: 'posting-list',
@@ -17,7 +18,8 @@ export class PostingListComponent implements OnInit {
 
   constructor(
     private postingService: PostingService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private crudStateService: CrudStateService
   ) {}
 
   ngOnInit(): void {
@@ -53,5 +55,12 @@ export class PostingListComponent implements OnInit {
     }
 
     return true;
+  }
+
+  showDetail(posting: Posting) {
+    this.postingService.openDetailDialog(
+      posting,
+      this.activatedRoute.snapshot.params
+    );
   }
 }

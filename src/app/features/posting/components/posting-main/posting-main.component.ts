@@ -1,3 +1,4 @@
+import { DefaultSizes } from './../../../../shared/utils/layout/default-sizes';
 import { RouteUtil } from 'src/app/shared/utils/route/route-util';
 import { PostingSearchParams } from './../../enums/postingSearchParams';
 import { PostingService } from './../../services/posting.service';
@@ -9,6 +10,7 @@ import { PostingCategory } from './../../../posting-category/interfaces/posting-
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { faCirclePlus, faFileArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { PostingGroup } from 'src/app/features/posting-group/interfaces/posting-group';
+import { CrudStateService } from 'src/app/shared/services/crud-state.service';
 
 @Component({
   selector: 'app-posting-main',
@@ -34,11 +36,14 @@ export class PostingMainComponent implements OnInit, AfterViewInit {
   postingCategoryId = 0;
   postingGroupId = 0;
   accountId = 0;
+  status = 'ALL';
+  defaultSizes = DefaultSizes;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private postingService: PostingService,
-    private router: Router
+    private router: Router,
+    private crudStateService: CrudStateService
   ) {}
 
   ngOnInit(): void {
@@ -104,7 +109,10 @@ export class PostingMainComponent implements OnInit, AfterViewInit {
   }
 
   new() {
-    this.postingService.openDetailDialog();
+    this.postingService.openDetailDialog(
+      undefined,
+      this.activatedRoute.snapshot.params
+    );
   }
 
   postingCategorySelected(postingCategory: PostingCategory) {
@@ -130,6 +138,15 @@ export class PostingMainComponent implements OnInit, AfterViewInit {
       this.updateParamsAfterChange(
         PostingSearchParams.accountId,
         account.id === 0 ? null : account.id
+      )
+    );
+  }
+
+  statusSelected(status: string) {
+    this.postingService.refreshList(
+      this.updateParamsAfterChange(
+        PostingSearchParams.status,
+        status === 'ALL' ? null : status
       )
     );
   }

@@ -1,1 +1,163 @@
-<p>detalhe do lançamento</p>
+<div class="modal-header">
+  <h5 class="modal-title" id="ModalLabel">Lançamento</h5>
+</div>
+<div class="modal-body">
+  <form [formGroup]="postingForm">
+    <div class="row mt-2">
+      <div class="col-lg-6">
+        <div class="form-floating">
+          <input
+            type="number"
+            class="form-control"
+            id="value"
+            formControlName="value"
+            placeholder="R$"
+          />
+          <label for="value" class="form-label">R$</label>
+        </div>
+        <form-message
+          message="Valor obrigatório"
+          *ngIf="
+        postingForm.get('value')?.errors?.['required'] &&
+        postingForm.get('value')?.touched"
+        ></form-message>
+      </div>
+      <div class="col-lg-6 text-end">
+        <!-- <span [class]="getStatusClass(posting.status ?? '')">{{
+          posting.status ?? '' | status
+        }}</span> -->
+        <posting-status [status]="posting?.status ?? ''"></posting-status>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-12">
+        <div class="form-floating">
+          <input
+            #descriptionInput
+            type="text"
+            class="form-control"
+            id="description"
+            formControlName="description"
+            placeholder="Descrição"
+          />
+          <label for="description" class="form-label">Descrição</label>
+        </div>
+        <form-message
+          message="Descrição obrigatória"
+          *ngIf="
+          postingForm.get('description')?.errors?.['required'] &&
+          postingForm.get('description')?.touched"
+        ></form-message>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-lg-6">
+        <posting-category-selector
+          formControlName="postingCategoryId"
+          id="postingCategoryId"
+        ></posting-category-selector>
+        <form-message
+          message="Categoria de lançamento obrigatória"
+          *ngIf="
+          postingForm.get('postingCategoryId')?.errors?.['required'] &&
+          postingForm.get('postingCategoryId')?.touched"
+        ></form-message>
+      </div>
+      <div class="col-lg-6">
+        <posting-group-selector
+          formControlName="postingGroupId"
+          id="postingGroupId"
+        ></posting-group-selector>
+        <form-message
+          message="Agrupador de lançamento obrigatório"
+          *ngIf="
+          postingForm.get('postingGroupId')?.errors?.['required'] &&
+          postingForm.get('postingGroupId')?.touched"
+        ></form-message>
+      </div>
+    </div>
+
+    <div class="row mt-2">
+      <div class="col-lg-6">
+        <label for="dueDate" class="form-label">Data de lançamento</label>
+        <input
+          type="date"
+          class="form-control"
+          id="dueDate"
+          formControlName="dueDate"
+        />
+        <form-message
+          message="Data de lançamento obrigatória"
+          *ngIf="
+          postingForm.get('dueDate')?.errors?.['required'] &&
+          postingForm.get('dueDate')?.touched"
+        ></form-message>
+      </div>
+      <div class="col-lg-6">
+        <label for="paymentDate" class="form-label">Data de pagamento</label>
+        <input
+          type="date"
+          class="form-control"
+          id="paymentDate"
+          formControlName="paymentDate"
+        />
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-lg-6">
+        <account-selector
+          formControlName="accountId"
+          id="accountId"
+        ></account-selector>
+        <form-message
+          message="Conta obrigatória"
+          *ngIf="
+        postingForm.get('accountId')?.errors?.['required'] &&
+        postingForm.get('accountId')?.touched"
+        ></form-message>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-12 text-end">
+        <button
+          title="Tooltip on top"
+          class="btn btn-warning ms-2"
+          (click)="confirmRestore()"
+          *ngIf="
+            screenController.getFieldStatus('restoreButton', this.state) &&
+            posting.status === postingStatus.DELETED
+          "
+        >
+          <fa-icon [icon]="faTrashArrowUP"></fa-icon>
+        </button>
+
+        <button
+          class="btn btn-danger ms-2"
+          (click)="confirmDelete()"
+          *ngIf="
+            screenController.getFieldStatus('deleteButton', this.state) &&
+            posting.status !== postingStatus.DELETED
+          "
+        >
+          <fa-icon [icon]="faTrash"></fa-icon>
+        </button>
+
+        <button
+          class="btn btn-secondary ms-2"
+          (click)="setStateToUpdate()"
+          *ngIf="screenController.getFieldStatus('editButton', this.state)"
+        >
+          <fa-icon [icon]="faPenToSquare"></fa-icon>
+        </button>
+        <button
+          class="btn btn-primary ms-2"
+          (click)="createOrUpdate()"
+          [disabled]="!postingForm.valid"
+          *ngIf="screenController.getFieldStatus('saveButton', this.state)"
+        >
+          <fa-icon [icon]="faFloppyDisk"></fa-icon>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
