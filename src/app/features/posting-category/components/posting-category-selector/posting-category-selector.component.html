@@ -1,5 +1,6 @@
 <div *ngIf="postingCategoryList$ | async as postingCategoryList">
   <label
+    *ngIf="!noLabel"
     for="postingCateegory"
     [class]="layoutUtil.getClassForLabelSize(this.size)"
     >Categoria de lançamento</label

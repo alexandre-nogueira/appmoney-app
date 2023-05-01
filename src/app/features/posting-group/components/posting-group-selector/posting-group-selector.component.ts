@@ -29,6 +29,8 @@ export class PostingGroupSelectorComponent
 {
   @Input() selectedId = 0;
   @Input() size = DefaultSizes.MEDIUM;
+  @Input() noLabel = false;
+
   @Output() selectedPostingGroupEvent = new EventEmitter<PostingGroup>();
 
   postingGroupList$!: Observable<PostingGroups>;

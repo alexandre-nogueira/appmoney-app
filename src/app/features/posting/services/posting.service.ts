@@ -11,10 +11,13 @@ import {
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { CrudService } from 'src/app/shared/interfaces/crud-service';
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, take } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ActivatedRoute, Params } from '@angular/router';
 import { PostingStatus } from '../enums/posting-status';
+import { Natures } from '../../../shared/enums/Nature';
+import { ConfirmationModalService } from 'src/app/shared/components/confirmation-modal/confirmation-modal.service';
+import { PostingFileUploadComponent } from '../components/posting-file-upload/posting-file-upload.component';
 
 const API = environment.apiURL;
 
@@ -23,13 +26,31 @@ const API = environment.apiURL;
 })
 export class PostingService implements CrudService {
   private _postings$ = new Subject<PostingsPaginated>();
+  private _revenueTotal = new Subject<number>();
+  private _expenseTotal = new Subject<number>();
 
   constructor(
     private httpClient: HttpClient,
     private modal: NgbModal,
     private crudStateService: CrudStateService,
-    private activatedRoute: ActivatedRoute
+    private confirmationModalService: ConfirmationModalService
   ) {}
+
+  setTotal(value: number, nature: Natures) {
+    if (nature === Natures.REVENUE) {
+      this._revenueTotal.next(value);
+    } else {
+      this._expenseTotal.next(value);
+    }
+  }
+
+  getExpenseTotal(): Observable<number> {
+    return this._expenseTotal.asObservable();
+  }
+
+  getRevenueTotal(): Observable<number> {
+    return this._revenueTotal.asObservable();
+  }
 
   refreshList(params: Params): void {
     const httpParams = RouteUtil.prepareHttpParams(params);
@@ -40,12 +61,15 @@ export class PostingService implements CrudService {
         next: (postings) => {
           this._postings$.next(postings);
         },
-        error: (error) => console.log(error),
+        error: (error) => {
+          this._postings$.error(error);
+          console.log(error);
+        },
       });
   }
 
-  getList(params: Params): Observable<PostingsPaginated> {
-    this.refreshList(params);
+  getList(params?: Params): Observable<PostingsPaginated> {
+    // this.refreshList(params);
     return this._postings$.asObservable();
   }
 
@@ -68,8 +92,10 @@ export class PostingService implements CrudService {
   edit(posting: Posting): Observable<Posting> {
     return this.httpClient.patch<Posting>(`${API}/posting/${posting.id}`, {
       accountId: posting.accountId,
-      postingCategoryId: posting.postingCategoryId,
-      postingGroupId: posting.postingGroupId,
+      postingCategoryId:
+        posting.postingCategoryId == 0 ? null : posting.postingCategoryId,
+      postingGroupId:
+        posting.postingGroupId == 0 ? null : posting.postingGroupId,
       description: posting.description,
       value: posting.value,
       dueDate: posting.dueDate,
@@ -85,19 +111,6 @@ export class PostingService implements CrudService {
     return this.httpClient.get<Posting>(`${API}/posting/${posting.id}/restore`);
   }
 
-  // pay(posting: Posting): Observable<Posting> {
-  //   return this.httpClient.patch(`${API}/posting/${posting.id}/pay`, {
-  //     paymentDate: posting.paymentDate,
-  //   });
-  // }
-
-  // reversePayment(posting: Posting): Observable<Posting> {
-  //   return this.httpClient.patch(
-  //     `${API}/posting/${posting.id}/reversePayment`,
-  //     {}
-  //   );
-  // }
-
   createMultiple(massPostings: MassPostings): Observable<MassPostingsReturn> {
     return this.httpClient.post<MassPostingsReturn>(
       `${API}/posting/createMultiple`,
@@ -112,8 +125,12 @@ export class PostingService implements CrudService {
     const postingDetailModal = this.modal.open(PostingDetailComponent, {
       size: 'lg',
       centered: true,
+      keyboard: false,
+      backdrop: 'static',
     });
 
+    //It is necessary to pass the route params via input because
+    // the modal does not have access to activatedRoute params.
     postingDetailModal.componentInstance.routeParams = routeParams;
 
     // The state must be set here because this "shown" method ensures the modal is fully load
@@ -124,5 +141,10 @@ export class PostingService implements CrudService {
         this.crudStateService.create();
       }
     });
+  }
+
+  openFileUploadDialog(routeParams?: Params) {
+    const uploadModal = this.modal.open(PostingFileUploadComponent);
+    uploadModal.componentInstance.routeParams = routeParams;
   }
 }

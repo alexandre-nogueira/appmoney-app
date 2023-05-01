@@ -14,7 +14,7 @@
           </a>
         </div>
         <div class="col-lg-6 col-md-3 col-sm-4 col-6">
-          <a href="">
+          <a (click)="upload()">
             <fa-icon
               [icon]="faFileArrowUp"
               size="3x"
@@ -98,8 +98,26 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-10 col-md-12 col-sm-12" *ngIf="qsParamsReady">
-      <posting-list></posting-list>
+    <div class="col-lg-10 col-md-12 col-sm-12">
+      <div class="row">
+        <div class="col-lg-4">
+          <summarizer
+            [label]="'Receitas'"
+            [nature]="nature.REVENUE"
+          ></summarizer>
+        </div>
+        <div class="col-lg-4">
+          <summarizer
+            [label]="'Despesas'"
+            [nature]="nature.EXPENSE"
+          ></summarizer>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-12">
+          <posting-list></posting-list>
+        </div>
+      </div>
     </div>
   </div>
 </div>

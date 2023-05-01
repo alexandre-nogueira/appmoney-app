@@ -13,6 +13,9 @@ import { PostingDetailComponent } from './components/posting-detail/posting-deta
 import { SharedModule } from 'src/app/shared/shared.module';
 import { StatusPipe } from './pipes/status.pipe';
 import { PostingStatusComponent } from './components/posting-status/posting-status.component';
+import { SummarizerComponent } from './components/summarizer/summarizer.component';
+import { PostingFileUploadComponent } from './components/posting-file-upload/posting-file-upload.component';
+import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -21,6 +24,8 @@ import { PostingStatusComponent } from './components/posting-status/posting-stat
     PostingDetailComponent,
     StatusPipe,
     PostingStatusComponent,
+    SummarizerComponent,
+    PostingFileUploadComponent,
   ],
   imports: [
     CommonModule,
@@ -32,6 +37,7 @@ import { PostingStatusComponent } from './components/posting-status/posting-stat
     PostingCategoryModule,
     PostingGroupModule,
     AccountModule,
+    NgbNavModule,
   ],
 })
 export class PostingModule {}

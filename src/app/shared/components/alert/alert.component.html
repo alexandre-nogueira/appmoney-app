@@ -1,11 +1,20 @@
-<div *ngFor="let alert of alerts" class="container mt-1">
-  <div class="{{ alert.type }} alert-dismissible text-center" role="alert">
-    {{ alert.message }}
-    <button
-      type="button"
-      class="btn-close"
-      data-bs-dismiss="alert"
-      aria-label="Close"
-    ></button>
+<div class="container">
+  <div class="row justify-content-md-center mt-4">
+    <div class="col col-lg-8">
+      <div *ngFor="let alert of alerts" class="container">
+        <div
+          class="{{ alert.type }} alert-dismissible text-center"
+          role="alert"
+        >
+          {{ alert.message }}
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

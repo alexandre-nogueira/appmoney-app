@@ -14,6 +14,7 @@ import { ConfirmationModalService } from 'src/app/shared/components/confirmation
 import { CrudStateService } from 'src/app/shared/services/crud-state.service';
 import { take } from 'rxjs/operators';
 import { FieldType } from 'src/app/shared/enums/FieldType';
+import { Natures } from '../../../../shared/enums/Nature';
 
 @Component({
   selector: 'posting-category-detail',
@@ -25,6 +26,7 @@ export class PostingCategoryDetailComponent implements OnInit {
   postingCategory!: PostingCategory;
   postingCategoryForm!: FormGroup;
   descriptionEnabled = true;
+  natures = Natures;
 
   //Icons
   faPenToSquare = faPenToSquare;
@@ -71,6 +73,15 @@ export class PostingCategoryDetailComponent implements OnInit {
         { state: UpdateState.UPDATE, enable: true },
       ],
     },
+    {
+      fieldName: 'nature',
+      fieldType: FieldType.INPUT,
+      values: [
+        { state: UpdateState.CREATE, enable: true },
+        { state: UpdateState.SHOW, enable: false },
+        { state: UpdateState.UPDATE, enable: true },
+      ],
+    },
   ]);
 
   constructor(
@@ -90,9 +101,11 @@ export class PostingCategoryDetailComponent implements OnInit {
 
     this.postingCategoryForm = this.formBuilder.group({
       description: [
-        { value: '', disabled: !this.descriptionEnabled },
+        '',
+        // { value: '', disabled: !this.descriptionEnabled },
         Validators.required,
       ],
+      nature: [Natures.EXPENSE],
     });
   }
 
@@ -103,15 +116,24 @@ export class PostingCategoryDetailComponent implements OnInit {
       this.screenController.getFieldControl(),
       this.state
     );
-    if (postingCategory) {
-      this.postingCategory = postingCategory;
-      this.postingCategoryForm.patchValue({
-        description: postingCategory.description,
-      });
-    }
     if (this.state === UpdateState.CREATE) {
       this.postingCategoryForm.reset();
+      this.postingCategoryForm.patchValue({
+        nature: Natures.EXPENSE,
+      });
       this.descriptionInput.nativeElement.focus();
+    }
+    if (postingCategory) {
+      this.postingCategory = postingCategory;
+      const nature = postingCategory.nature
+        ? postingCategory.nature
+        : Natures.EXPENSE;
+      console.log(postingCategory.nature);
+
+      this.postingCategoryForm.patchValue({
+        description: postingCategory.description,
+        nature: nature,
+      });
     }
   }
 
@@ -152,9 +174,11 @@ export class PostingCategoryDetailComponent implements OnInit {
   createOrUpdate() {
     const description =
       this.postingCategoryForm.get('description')?.value ?? '';
+    const nature = this.postingCategoryForm.get('nature')?.value;
+
     if (this.state === UpdateState.CREATE) {
       this.postingCategoryService
-        .create({ description: description })
+        .create({ description: description, nature: nature })
         .subscribe({
           next: () => {
             this.alertService.success('Categoria criada com sucesso.');
@@ -171,6 +195,7 @@ export class PostingCategoryDetailComponent implements OnInit {
         .edit({
           id: this.postingCategory.id,
           description: description,
+          nature: nature,
           familyId: this.postingCategory.familyId,
         })
         .subscribe({

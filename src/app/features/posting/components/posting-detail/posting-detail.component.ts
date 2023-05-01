@@ -20,6 +20,8 @@ import { ScreenController } from 'src/app/shared/utils/screenControl/screen-cont
 import { FieldType } from 'src/app/shared/enums/FieldType';
 import { take } from 'rxjs/operators';
 import { PostingStatus } from '../../enums/posting-status';
+import { Natures } from 'src/app/shared/enums/Nature';
+import { PostingCategory } from 'src/app/features/posting-category/interfaces/posting-category';
 
 @Component({
   selector: 'posting-detail',
@@ -31,6 +33,8 @@ export class PostingDetailComponent implements OnInit {
   posting!: Posting;
   postingForm!: FormGroup;
   postingStatus = PostingStatus;
+  title = 'Lançamento';
+  tittleClass = 'modal-header';
 
   @Input() routeParams!: Params;
 
@@ -204,12 +208,15 @@ export class PostingDetailComponent implements OnInit {
       this.postingForm.patchValue({
         description: posting?.description,
         value: posting?.value,
-        postingCategoryId: posting?.postingCategoryId,
-        postingGroupId: posting?.postingGroupId,
+        postingCategoryId: posting?.postingCategoryId
+          ? posting?.postingCategoryId
+          : 0,
+        postingGroupId: posting?.postingGroupId ? posting?.postingGroupId : 0,
         dueDate: posting?.dueDate,
         paymentDate: posting?.paymentDate,
         accountId: posting?.accountId,
       });
+      this.setTitleDetais(this.posting.postingCategory?.nature);
     }
   }
 
@@ -219,7 +226,23 @@ export class PostingDetailComponent implements OnInit {
   }
 
   close() {
-    this.activeModal.dismiss();
+    if (this.state === UpdateState.SHOW) {
+      this.activeModal.dismiss();
+    } else {
+      this.confirmationModalService
+        .show(
+          'Fechar',
+          'As informações não salvas serão perdidas, deseja realmente fechar?'
+        )
+        .pipe(take(1))
+        .subscribe({
+          next: (result) => {
+            if (result) {
+              this.activeModal.dismiss();
+            }
+          },
+        });
+    }
   }
 
   createOrUpdate() {
@@ -241,8 +264,7 @@ export class PostingDetailComponent implements OnInit {
           this.alertService.success('Lançamento criado com sucesso!');
           this.postingService.refreshList(this.routeParams);
           // console.log(this.routeParams);
-
-          this.activeModal.close();
+          this.activeModal.dismiss();
         },
         error: (error) => {
           this.alertService.danger('Erro ao criar lançamento');
@@ -254,7 +276,7 @@ export class PostingDetailComponent implements OnInit {
         next: () => {
           this.alertService.success('Lançamento alterado com sucesso');
           this.postingService.refreshList(this.routeParams);
-          this.activeModal.close();
+          this.activeModal.dismiss();
         },
         error: (error) => {
           this.alertService.danger('Erro ao alterar lançamento');
@@ -325,5 +347,22 @@ export class PostingDetailComponent implements OnInit {
         console.log(error);
       },
     });
+  }
+
+  postingCategorySelected(postingCategory: PostingCategory) {
+    this.setTitleDetais(postingCategory.nature);
+  }
+
+  setTitleDetais(nature?: Natures) {
+    if (nature === Natures.REVENUE) {
+      this.tittleClass = 'modal-header bg-success bg-opacity-75 text-white';
+      this.title = 'Receita';
+    } else if (nature === Natures.EXPENSE) {
+      this.tittleClass = 'modal-header bg-danger bg-opacity-75 text-white';
+      this.title = 'Despesa';
+    } else {
+      this.tittleClass = 'modal-header';
+      this.title = 'Lançamento';
+    }
   }
 }

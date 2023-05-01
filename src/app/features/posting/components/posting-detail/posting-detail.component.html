@@ -1,20 +1,24 @@
-<div class="modal-header">
-  <h5 class="modal-title" id="ModalLabel">Lançamento</h5>
+<div [class]="tittleClass">
+  <h5 class="modal-title" id="ModalLabel">{{ title }}</h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="close()"
+  ></button>
 </div>
 <div class="modal-body">
   <form [formGroup]="postingForm">
     <div class="row mt-2">
       <div class="col-lg-6">
-        <div class="form-floating">
-          <input
-            type="number"
-            class="form-control"
-            id="value"
-            formControlName="value"
-            placeholder="R$"
-          />
-          <label for="value" class="form-label">R$</label>
-        </div>
+        <label for="value" class="form-label">Valor</label>
+        <input
+          type="number"
+          class="form-control"
+          id="value"
+          formControlName="value"
+          placeholder="R$"
+        />
         <form-message
           message="Valor obrigatório"
           *ngIf="
@@ -23,25 +27,20 @@
         ></form-message>
       </div>
       <div class="col-lg-6 text-end">
-        <!-- <span [class]="getStatusClass(posting.status ?? '')">{{
-          posting.status ?? '' | status
-        }}</span> -->
         <posting-status [status]="posting?.status ?? ''"></posting-status>
       </div>
     </div>
     <div class="row mt-2">
       <div class="col-12">
-        <div class="form-floating">
-          <input
-            #descriptionInput
-            type="text"
-            class="form-control"
-            id="description"
-            formControlName="description"
-            placeholder="Descrição"
-          />
-          <label for="description" class="form-label">Descrição</label>
-        </div>
+        <label for="description" class="form-label">Descrição</label>
+        <input
+          #descriptionInput
+          type="text"
+          class="form-control"
+          id="description"
+          formControlName="description"
+          placeholder="Descrição"
+        />
         <form-message
           message="Descrição obrigatória"
           *ngIf="
@@ -55,6 +54,7 @@
         <posting-category-selector
           formControlName="postingCategoryId"
           id="postingCategoryId"
+          (selectedPostingCategoryEvent)="postingCategorySelected($event)"
         ></posting-category-selector>
         <form-message
           message="Categoria de lançamento obrigatória"

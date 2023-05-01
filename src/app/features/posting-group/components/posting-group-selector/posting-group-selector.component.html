@@ -1,5 +1,8 @@
 <div *ngIf="postingGroupList$ | async as postingGroupList">
-  <label for="postingGroup" [class]="layoutUtil.getClassForLabelSize(this.size)"
+  <label
+    *ngIf="!noLabel"
+    for="postingGroup"
+    [class]="layoutUtil.getClassForLabelSize(this.size)"
     >Agrupador de lançamento</label
   >
   <select

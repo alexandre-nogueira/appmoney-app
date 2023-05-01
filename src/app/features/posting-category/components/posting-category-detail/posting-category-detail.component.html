@@ -23,6 +23,36 @@
                   ></form-message>
                 </div>
               </div>
+              <div class="row mt-2">
+                <div class="col-lg-6 col-md-12 col-sm-12 col-12">
+                  <div class="form-check-inline">
+                    <input
+                      type="radio"
+                      class="btn-check"
+                      name="nature"
+                      [value]="natures.REVENUE"
+                      id="revenue"
+                      formControlName="nature"
+                    />
+                    <label class="btn btn-outline-success" for="revenue"
+                      >Receita</label
+                    >
+                  </div>
+                  <div class="form-check-inline">
+                    <input
+                      type="radio"
+                      class="btn-check"
+                      name="nature"
+                      [value]="natures.EXPENSE"
+                      id="expense"
+                      formControlName="nature"
+                    />
+                    <label class="btn btn-outline-danger" for="expense"
+                      >Despesa</label
+                    >
+                  </div>
+                </div>
+              </div>
             </form>
           </div>
           <div class="row mt-3">

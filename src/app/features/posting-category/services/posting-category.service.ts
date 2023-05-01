@@ -38,13 +38,17 @@ export class PostingCategoryService implements CrudService {
   create(postingCategory: PostingCategory): Observable<PostingCategory> {
     return this.httpClient.post<PostingCategory>(`${API}/postingCategory`, {
       description: postingCategory.description,
+      nature: postingCategory.nature,
     });
   }
 
   edit(postingCategory: PostingCategory): Observable<PostingCategory> {
     return this.httpClient.patch<PostingCategory>(
       `${API}/postingCategory/${postingCategory.id}`,
-      { description: postingCategory.description }
+      {
+        description: postingCategory.description,
+        nature: postingCategory.nature,
+      }
     );
   }
 

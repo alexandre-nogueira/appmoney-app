@@ -11,17 +11,17 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { faCirclePlus, faFileArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { PostingGroup } from 'src/app/features/posting-group/interfaces/posting-group';
 import { CrudStateService } from 'src/app/shared/services/crud-state.service';
+import { Natures } from 'src/app/shared/enums/Nature';
 
 @Component({
   selector: 'app-posting-main',
   templateUrl: './posting-main.component.html',
   styleUrls: ['./posting-main.component.scss'],
 })
-export class PostingMainComponent implements OnInit, AfterViewInit {
+export class PostingMainComponent implements OnInit {
   faCirclePlus = faCirclePlus;
   faFileArrowUp = faFileArrowUp;
   resolved = false;
-  qsParamsReady = false;
 
   postingList$!: Observable<PostingsPaginated>;
 
@@ -38,6 +38,7 @@ export class PostingMainComponent implements OnInit, AfterViewInit {
   accountId = 0;
   status = 'ALL';
   defaultSizes = DefaultSizes;
+  nature = Natures;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -47,18 +48,24 @@ export class PostingMainComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.updateSearchParameters();
+    const routeParams = this.updateSearchParameters();
+    this.postingService.refreshList(
+      RouteUtil.prepareQSParams(routeParams, {
+        [PostingSearchParams.page]: 1,
+        [PostingSearchParams.perPage]: 5000,
+      })
+    );
   }
 
-  ngAfterViewInit(): void {
-    //it must be assynchronous to prevent the error:
-    //NG0100: Expression has changed after it was checked
-    setTimeout(() => {
-      this.qsParamsReady = true;
-    }, 0);
-  }
+  // ngAfterViewInit(): void {
+  //   //it must be assynchronous to prevent the error:
+  //   //NG0100: Expression has changed after it was checked
+  //   setTimeout(() => {
+  //     this.qsParamsReady = true;
+  //   }, 0);
+  // }
 
-  updateSearchParameters() {
+  updateSearchParameters(): Params {
     let routeParams = this.activatedRoute.snapshot.params;
     let updateRoute = false;
 
@@ -98,6 +105,7 @@ export class PostingMainComponent implements OnInit, AfterViewInit {
     if (updateRoute) {
       this.router.navigate(['/posting', routeParams]);
     }
+    return routeParams;
   }
 
   updateSingleSearchParameter(paramName: string) {
@@ -111,6 +119,12 @@ export class PostingMainComponent implements OnInit, AfterViewInit {
   new() {
     this.postingService.openDetailDialog(
       undefined,
+      this.activatedRoute.snapshot.params
+    );
+  }
+
+  upload() {
+    this.postingService.openFileUploadDialog(
       this.activatedRoute.snapshot.params
     );
   }

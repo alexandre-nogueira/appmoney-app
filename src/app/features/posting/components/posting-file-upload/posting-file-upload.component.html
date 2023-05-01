@@ -1,0 +1,31 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="ModalLabel">Lançamentos em massa</h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="close()"
+  ></button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="uploadForm">
+    <div class="row mt-2">
+      <div class="col-9">
+        <account-selector
+          formControlName="accountId"
+          id="accountId"
+        ></account-selector>
+        <form-message
+          message="Conta obrigatória"
+          *ngIf="
+        uploadForm.get('accountId')?.errors?.['required'] &&
+        uploadForm.get('accountId')?.touched"
+        ></form-message>
+      </div>
+    </div>
+    <upload-file
+      [label]="'Arquivo de lançamentos'"
+      (fileUploaded)="fileUploaded($event)"
+    ></upload-file>
+  </form>
+</div>

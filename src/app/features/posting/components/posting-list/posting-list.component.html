@@ -25,9 +25,37 @@
                 ></posting-status>
               </td>
               <td>{{ posting.description }}</td>
-              <td>{{ posting.value | currency: 'BRL' }}</td>
-              <td>{{ posting.postingCategory?.description }}</td>
-              <td>{{ posting.postingGroup?.description }}</td>
+              <td [class]="getValueClass(posting)">
+                <strong> {{ posting.value | currency: 'BRL' }}</strong>
+              </td>
+              <td *ngIf="posting?.postingCategoryId">
+                {{ posting.postingCategory?.description }}
+              </td>
+              <td *ngIf="!posting?.postingCategoryId">
+                <posting-category-selector
+                  [size]="defaultSizes.SMALL"
+                  [noLabel]="true"
+                  onclick="event.stopPropagation()"
+                  (selectedPostingCategoryEvent)="
+                    postingCategorySelected($event, posting)
+                  "
+                ></posting-category-selector>
+              </td>
+
+              <td *ngIf="posting?.postingGroupId">
+                {{ posting.postingGroup?.description }}
+              </td>
+              <td *ngIf="!posting?.postingGroupId">
+                <posting-group-selector
+                  [size]="defaultSizes.SMALL"
+                  [noLabel]="true"
+                  onclick="event.stopPropagation()"
+                  (selectedPostingGroupEvent)="
+                    postingGroupSelected($event, posting)
+                  "
+                ></posting-group-selector>
+              </td>
+
               <td>{{ posting.dueDate | date: 'dd/MM/YYYY' }}</td>
               <td>{{ posting.paymentDate | date: 'dd/MM/YYYY' }}</td>
               <td>{{ posting.account?.description }}</td>
@@ -38,6 +66,8 @@
     </div>
   </div>
 </div>
+<ng-template #popContent>Hello, <b>Teste</b>!</ng-template>
+<ng-template #popTitle>Fancy <b>content!!</b></ng-template>
 
 <ng-template #empty>
   <div *ngIf="!resolved" class="container mt-3">

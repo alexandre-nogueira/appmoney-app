@@ -31,6 +31,7 @@ export class PostingCategorySelectorComponent
 {
   @Input() selectedId = 0;
   @Input() size = DefaultSizes.MEDIUM;
+  @Input() noLabel = false;
 
   @Output() selectedPostingCategoryEvent = new EventEmitter<PostingCategory>();
 
