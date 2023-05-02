@@ -39,6 +39,7 @@ export class PostingMainComponent implements OnInit {
   status = 'ALL';
   defaultSizes = DefaultSizes;
   nature = Natures;
+  activeTab = 1;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -189,5 +190,9 @@ export class PostingMainComponent implements OnInit {
 
     this.router.navigate(['/posting', newParams]);
     return newParams;
+  }
+
+  setActiveTab(activeTab: number) {
+    this.activeTab = activeTab;
   }
 }

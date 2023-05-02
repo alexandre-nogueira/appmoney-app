@@ -47,7 +47,7 @@ export class PostingListComponent implements OnInit {
   setTotals(postingsPagiinated: PostingsPaginated) {
     let revenues = 0;
     let expenses = 0;
-    postingsPagiinated.data.forEach((posting) => {
+    postingsPagiinated.data?.forEach((posting) => {
       if (posting.postingCategory?.nature === Natures.REVENUE) {
         revenues += posting.value ?? 0;
       } else {

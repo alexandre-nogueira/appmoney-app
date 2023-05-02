@@ -1,0 +1,16 @@
+<div class="row mt-3">
+  <div class="col-lg-5 col-md-8 col-sm-12 col-12">
+    <table class="table">
+      <tbody>
+        <tr *ngFor="let postingGrouped of postingsGrouped" class="shadow-sm">
+          <td class="fs-4">
+            {{ postingGrouped.postingCategory?.description }}
+          </td>
+          <td [class]="getTotalsClass(postingGrouped.postingCategory?.nature)">
+            {{ postingGrouped.total | currency: 'BRL' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

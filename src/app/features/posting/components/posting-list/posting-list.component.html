@@ -1,5 +1,5 @@
 <div *ngIf="postingList$ | async as postingList; else empty">
-  <div *ngIf="postingList.meta.total > 0; else empty">
+  <div *ngIf="postingList.meta?.total !== 0; else empty">
     <div class="row">
       <div class="col-12">
         <table class="table table-hover table-striped">

@@ -16,6 +16,7 @@ import { PostingStatusComponent } from './components/posting-status/posting-stat
 import { SummarizerComponent } from './components/summarizer/summarizer.component';
 import { PostingFileUploadComponent } from './components/posting-file-upload/posting-file-upload.component';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import { PostingListGroupedComponent } from './components/posting-list-grouped/posting-list-grouped.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
     PostingStatusComponent,
     SummarizerComponent,
     PostingFileUploadComponent,
+    PostingListGroupedComponent,
   ],
   imports: [
     CommonModule,

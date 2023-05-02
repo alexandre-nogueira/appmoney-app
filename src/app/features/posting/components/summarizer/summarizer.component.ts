@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { Natures } from '../../../../shared/enums/Nature';
 import { PostingService } from 'src/app/features/posting/services/posting.service';
 import { Observable } from 'rxjs';
@@ -8,20 +8,21 @@ import { Observable } from 'rxjs';
   templateUrl: './summarizer.component.html',
   styleUrls: ['./summarizer.component.scss'],
 })
-export class SummarizerComponent implements OnInit {
+export class SummarizerComponent implements OnInit, AfterViewInit {
   @Input() nature: Natures = Natures.EXPENSE;
   @Input() label = 'Total';
   value$!: Observable<number>;
 
   constructor(private postingService: PostingService) {}
-
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     if (this.nature === Natures.EXPENSE) {
       this.value$ = this.postingService.getExpenseTotal();
     } else {
       this.value$ = this.postingService.getRevenueTotal();
     }
   }
+
+  ngOnInit(): void {}
 
   getClass() {
     if (this.nature === Natures.EXPENSE) {

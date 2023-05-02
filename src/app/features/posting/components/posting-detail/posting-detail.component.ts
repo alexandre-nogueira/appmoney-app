@@ -179,8 +179,8 @@ export class PostingDetailComponent implements OnInit {
     this.postingForm = this.formBuilder.group({
       description: ['', Validators.required],
       value: ['', Validators.required],
-      postingCategoryId: ['', Validators.required],
-      postingGroupId: ['', Validators.required],
+      postingCategoryId: ['0'],
+      postingGroupId: ['0'],
       dueDate: ['', Validators.required],
       paymentDate: [''],
       accountId: ['', Validators.required],

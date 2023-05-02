@@ -8,13 +8,12 @@ import {
   MassPostings,
   MassPostingsReturn,
 } from './../interfaces/posting';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { CrudService } from 'src/app/shared/interfaces/crud-service';
 import { Injectable } from '@angular/core';
-import { Observable, Subject, take } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { ActivatedRoute, Params } from '@angular/router';
-import { PostingStatus } from '../enums/posting-status';
+import { Params } from '@angular/router';
 import { Natures } from '../../../shared/enums/Nature';
 import { ConfirmationModalService } from 'src/app/shared/components/confirmation-modal/confirmation-modal.service';
 import { PostingFileUploadComponent } from '../components/posting-file-upload/posting-file-upload.component';
@@ -25,7 +24,7 @@ const API = environment.apiURL;
   providedIn: 'root',
 })
 export class PostingService implements CrudService {
-  private _postings$ = new Subject<PostingsPaginated>();
+  private _postings$ = new BehaviorSubject<PostingsPaginated>({});
   private _revenueTotal = new Subject<number>();
   private _expenseTotal = new Subject<number>();
 
@@ -80,8 +79,10 @@ export class PostingService implements CrudService {
   create(posting: Posting): Observable<Posting> {
     return this.httpClient.post<Posting>(`${API}/posting/create`, {
       accountId: posting.accountId,
-      postingCategoryId: posting.postingCategoryId,
-      postingGroupId: posting.postingGroupId,
+      postingCategoryId:
+        posting.postingCategoryId == 0 ? null : posting.postingCategoryId,
+      postingGroupId:
+        posting.postingGroupId == 0 ? null : posting.postingGroupId,
       description: posting.description,
       value: posting.value,
       dueDate: posting.dueDate,

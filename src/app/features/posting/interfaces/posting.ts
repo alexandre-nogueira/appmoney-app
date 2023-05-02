@@ -20,8 +20,8 @@ export interface Posting {
 export type Postings = Array<Posting>;
 
 export interface PostingsPaginated {
-  meta: Pagination;
-  data: Postings;
+  meta?: Pagination;
+  data?: Postings;
 }
 
 export interface MassPostings {
@@ -32,4 +32,10 @@ export interface MassPostings {
 export interface MassPostingsReturn {
   createdPostings?: Postings;
   duplicatedPostings?: Postings;
+}
+
+export interface PostingsGrouped {
+  postingCategoryId?: number;
+  postingCategory?: PostingCategory;
+  total?: number;
 }
