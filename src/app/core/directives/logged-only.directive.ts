@@ -16,13 +16,11 @@ export class LoggedOnlyDirective implements OnChanges {
     private renderer: Renderer2,
     private userService: UserService
   ) {
-    console.log('passei no construtor');
     !this.userService.isLogged() &&
       this.renderer.setStyle(this.element.nativeElement, 'display', 'none');
   }
 
   ngOnChanges(): void {
-    console.log('passei no onChanges');
     !this.userService.isLogged() &&
       this.renderer.setStyle(this.element.nativeElement, 'display', 'none');
   }

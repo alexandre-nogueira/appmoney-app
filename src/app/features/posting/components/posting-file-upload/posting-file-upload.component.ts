@@ -7,6 +7,7 @@ import { PostingService } from '../../services/posting.service';
 import { AlertService } from 'src/app/shared/components/alert/alert.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Params } from '@angular/router';
+import { RouteUtil } from 'src/app/shared/utils/route/route-util';
 
 @Component({
   selector: 'posting-file-upload',
@@ -111,8 +112,9 @@ export class PostingFileUploadComponent implements OnInit {
       .subscribe({
         next: (massPostingsReturn) => {
           this.alertService.success('Lançamentos criados com sucesso');
-          console.log(massPostingsReturn);
-          this.postingService.refreshList(this.routeParams);
+          this.postingService.refreshList(
+            RouteUtil.prepareQSParams(this.routeParams, {})
+          );
         },
         error: (error) => {
           console.log(error);

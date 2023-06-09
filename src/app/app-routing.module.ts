@@ -57,6 +57,11 @@ const routes: Routes = [
       import('./features/account/account.module').then((m) => m.AccountModule),
   },
   {
+    path: 'reports',
+    loadChildren: () =>
+      import('./reports/reports.module').then((m) => m.ReportsModule),
+  },
+  {
     path: '**',
     component: PageNotFoundComponent,
   },

@@ -22,6 +22,7 @@ import { take } from 'rxjs/operators';
 import { PostingStatus } from '../../enums/posting-status';
 import { Natures } from 'src/app/shared/enums/Nature';
 import { PostingCategory } from 'src/app/features/posting-category/interfaces/posting-category';
+import { RouteUtil } from 'src/app/shared/utils/route/route-util';
 
 @Component({
   selector: 'posting-detail',
@@ -158,6 +159,33 @@ export class PostingDetailComponent implements OnInit {
         { state: UpdateState.UPDATE, enable: false },
       ],
     },
+    {
+      fieldName: 'installment',
+      fieldType: FieldType.INPUT,
+      values: [
+        { state: UpdateState.CREATE, enable: true },
+        { state: UpdateState.SHOW, enable: false },
+        { state: UpdateState.UPDATE, enable: true },
+      ],
+    },
+    {
+      fieldName: 'installments',
+      fieldType: FieldType.INPUT,
+      values: [
+        { state: UpdateState.CREATE, enable: true },
+        { state: UpdateState.SHOW, enable: false },
+        { state: UpdateState.UPDATE, enable: true },
+      ],
+    },
+    {
+      fieldName: 'observation',
+      fieldType: FieldType.INPUT,
+      values: [
+        { state: UpdateState.CREATE, enable: true },
+        { state: UpdateState.SHOW, enable: false },
+        { state: UpdateState.UPDATE, enable: true },
+      ],
+    },
   ]);
 
   constructor(
@@ -185,6 +213,9 @@ export class PostingDetailComponent implements OnInit {
       paymentDate: [''],
       accountId: ['', Validators.required],
       status: [''],
+      installment: [''],
+      installments: [''],
+      observation: ['', Validators.maxLength(1000)],
     });
   }
 
@@ -215,6 +246,9 @@ export class PostingDetailComponent implements OnInit {
         dueDate: posting?.dueDate,
         paymentDate: posting?.paymentDate,
         accountId: posting?.accountId,
+        installment: posting?.installment,
+        installments: posting?.installments,
+        observation: posting?.observation,
       });
       this.setTitleDetais(this.posting.postingCategory?.nature);
     }
@@ -257,12 +291,18 @@ export class PostingDetailComponent implements OnInit {
     this.posting.paymentDate =
       this.postingForm.get('paymentDate')?.value ?? undefined;
     this.posting.accountId = this.postingForm.get('accountId')?.value ?? 0;
+    this.posting.installment = this.postingForm.get('installment')?.value ?? 0;
+    this.posting.installments =
+      this.postingForm.get('installments')?.value ?? 0;
+    this.posting.observation = this.postingForm.get('observation')?.value ?? '';
 
     if (this.state === UpdateState.CREATE) {
       this.postingService.create(this.posting).subscribe({
         next: () => {
           this.alertService.success('Lançamento criado com sucesso!');
-          this.postingService.refreshList(this.routeParams);
+          this.postingService.refreshList(
+            RouteUtil.prepareQSParams(this.routeParams, {})
+          );
           // console.log(this.routeParams);
           this.activeModal.dismiss();
         },
@@ -275,7 +315,9 @@ export class PostingDetailComponent implements OnInit {
       this.postingService.edit(this.posting).subscribe({
         next: () => {
           this.alertService.success('Lançamento alterado com sucesso');
-          this.postingService.refreshList(this.routeParams);
+          this.postingService.refreshList(
+            RouteUtil.prepareQSParams(this.routeParams, {})
+          );
           this.activeModal.dismiss();
         },
         error: (error) => {
@@ -306,7 +348,9 @@ export class PostingDetailComponent implements OnInit {
     this.postingService.delete(this.posting).subscribe({
       next: () => {
         this.alertService.success('Lançamento eliminado com sucesso');
-        this.postingService.refreshList(this.routeParams);
+        this.postingService.refreshList(
+          RouteUtil.prepareQSParams(this.routeParams, {})
+        );
         this.activeModal.close();
       },
       error: (error) => {
@@ -336,9 +380,9 @@ export class PostingDetailComponent implements OnInit {
     this.postingService.restore(this.posting).subscribe({
       next: (updatedPosting) => {
         this.alertService.success('Lançamento reativado.');
-        this.postingService.refreshList(this.routeParams);
-        // this.posting.status = updatedPosting.status;
-        console.log(updatedPosting);
+        this.postingService.refreshList(
+          RouteUtil.prepareQSParams(this.routeParams, {})
+        );
 
         this.crudStateService.update(updatedPosting);
       },

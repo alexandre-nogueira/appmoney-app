@@ -7,16 +7,18 @@ import {
   PostingsPaginated,
   MassPostings,
   MassPostingsReturn,
+  Postings,
 } from './../interfaces/posting';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { CrudService } from 'src/app/shared/interfaces/crud-service';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Params } from '@angular/router';
 import { Natures } from '../../../shared/enums/Nature';
 import { ConfirmationModalService } from 'src/app/shared/components/confirmation-modal/confirmation-modal.service';
 import { PostingFileUploadComponent } from '../components/posting-file-upload/posting-file-upload.component';
+import { PostingSearchParams } from '../enums/postingSearchParams';
 
 const API = environment.apiURL;
 
@@ -25,8 +27,7 @@ const API = environment.apiURL;
 })
 export class PostingService implements CrudService {
   private _postings$ = new BehaviorSubject<PostingsPaginated>({});
-  private _revenueTotal = new Subject<number>();
-  private _expenseTotal = new Subject<number>();
+  private _futureInstallments = new BehaviorSubject<Postings>([]);
 
   constructor(
     private httpClient: HttpClient,
@@ -35,23 +36,15 @@ export class PostingService implements CrudService {
     private confirmationModalService: ConfirmationModalService
   ) {}
 
-  setTotal(value: number, nature: Natures) {
-    if (nature === Natures.REVENUE) {
-      this._revenueTotal.next(value);
-    } else {
-      this._expenseTotal.next(value);
-    }
-  }
-
-  getExpenseTotal(): Observable<number> {
-    return this._expenseTotal.asObservable();
-  }
-
-  getRevenueTotal(): Observable<number> {
-    return this._revenueTotal.asObservable();
-  }
-
   refreshList(params: Params): void {
+    params[PostingSearchParams.page] = 1;
+    params[PostingSearchParams.perPage] = 5000;
+
+    //Split status to an array, so the api works.
+    const status = params[PostingSearchParams.status];
+    if (typeof status == 'string') {
+      params[PostingSearchParams.status] = status.split(',');
+    }
     const httpParams = RouteUtil.prepareHttpParams(params);
 
     this.httpClient
@@ -76,6 +69,25 @@ export class PostingService implements CrudService {
     return this.httpClient.get<Posting>(`${API}/posting/${id}`);
   }
 
+  getFutureInstallments() {
+    return this._futureInstallments.asObservable();
+  }
+  refreshFutureInstallments(params: Params) {
+    const httpParams = RouteUtil.prepareHttpParams(params);
+    this.httpClient
+      .get<Postings>(`${API}/posting/futureInstallments`, {
+        params: httpParams,
+      })
+      .subscribe({
+        next: (postings) => {
+          this._futureInstallments.next(postings);
+        },
+        error: (error) => {
+          this._futureInstallments.error(error);
+        },
+      });
+  }
+
   create(posting: Posting): Observable<Posting> {
     return this.httpClient.post<Posting>(`${API}/posting/create`, {
       accountId: posting.accountId,
@@ -87,6 +99,9 @@ export class PostingService implements CrudService {
       value: posting.value,
       dueDate: posting.dueDate,
       paymentDate: posting.paymentDate,
+      installment: posting.installment,
+      installments: posting.installments,
+      observation: posting.observation,
     });
   }
 
@@ -101,6 +116,9 @@ export class PostingService implements CrudService {
       value: posting.value,
       dueDate: posting.dueDate,
       paymentDate: posting.paymentDate,
+      installment: posting.installment,
+      installments: posting.installments,
+      observation: posting.observation,
     });
   }
 

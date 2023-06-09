@@ -1,81 +1,100 @@
-<div *ngIf="postingList$ | async as postingList; else empty">
-  <div *ngIf="postingList.meta?.total !== 0; else empty">
-    <div class="row">
-      <div class="col-12">
-        <table class="table table-hover table-striped">
-          <thead>
-            <th scope="col" class="fontSmall text-center">Status</th>
-            <th scope="col" class="fontSmall">Descrição</th>
-            <th scope="col" class="fontSmall">Valor</th>
-            <th scope="col" class="fontSmall">Categoria</th>
-            <th scope="col" class="fontSmall">Agrupador</th>
-            <th scope="col" class="fontSmall">Lançamento</th>
-            <th scope="col" class="fontSmall">Pagamento</th>
-            <th scope="col" class="fontSmall">Conta</th>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="let posting of postingList.data"
-              class="fontSmall crudTableRow"
-              (click)="showDetail(posting)"
-            >
-              <td class="text-center">
-                <posting-status
-                  [status]="posting.status ?? ''"
-                ></posting-status>
-              </td>
-              <td>{{ posting.description }}</td>
-              <td [class]="getValueClass(posting)">
-                <strong> {{ posting.value | currency: 'BRL' }}</strong>
-              </td>
-              <td *ngIf="posting?.postingCategoryId">
-                {{ posting.postingCategory?.description }}
-              </td>
-              <td *ngIf="!posting?.postingCategoryId">
-                <posting-category-selector
-                  [size]="defaultSizes.SMALL"
-                  [noLabel]="true"
-                  onclick="event.stopPropagation()"
-                  (selectedPostingCategoryEvent)="
-                    postingCategorySelected($event, posting)
-                  "
-                ></posting-category-selector>
-              </td>
-
-              <td *ngIf="posting?.postingGroupId">
-                {{ posting.postingGroup?.description }}
-              </td>
-              <td *ngIf="!posting?.postingGroupId">
-                <posting-group-selector
-                  [size]="defaultSizes.SMALL"
-                  [noLabel]="true"
-                  onclick="event.stopPropagation()"
-                  (selectedPostingGroupEvent)="
-                    postingGroupSelected($event, posting)
-                  "
-                ></posting-group-selector>
-              </td>
-
-              <td>{{ posting.dueDate | date: 'dd/MM/YYYY' }}</td>
-              <td>{{ posting.paymentDate | date: 'dd/MM/YYYY' }}</td>
-              <td>{{ posting.account?.description }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+<div class="row">
+  <div class="col-lg-2 col-md-3 col-sm-8 col-8">
+    <input
+      type="text"
+      placeholder="filtrar"
+      class="form-control form-control-sm"
+      [(ngModel)]="filterText"
+    />
   </div>
 </div>
-<ng-template #popContent>Hello, <b>Teste</b>!</ng-template>
-<ng-template #popTitle>Fancy <b>content!!</b></ng-template>
+
+<div *ngIf="postingList?.data" class="row crudTableContainer mt-1">
+  <div class="col-12">
+    <table class="table table-hover table-striped">
+      <thead>
+        <th scope="col" class="fontSmall text-center">Status</th>
+        <th scope="col" class="fontSmall">Descrição</th>
+        <th scope="col" class="fontSmall">Valor</th>
+        <th scope="col" class="fontSmall">Categoria</th>
+        <th scope="col" class="fontSmall">Agrupador</th>
+        <th scope="col" class="fontSmall">Lançamento</th>
+        <th scope="col" class="fontSmall">Pagamento</th>
+        <th scope="col" class="fontSmall">Conta</th>
+        <th scope="col" class="fontSmall">Parcela</th>
+        <th scope="col" class="fontSmall"></th>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let posting of sortPostings(postingList.data)
+              | filterTable: filterText
+          "
+          class="fontSmall crudTableRow"
+          (click)="showDetail(posting)"
+        >
+          <td class="text-center">
+            <posting-status [status]="posting.status ?? ''"></posting-status>
+          </td>
+          <td>{{ posting.description }}</td>
+          <td [class]="getValueClass(posting)">
+            <strong> {{ posting.value | currency: 'BRL' }}</strong>
+          </td>
+          <td *ngIf="posting?.postingCategoryId">
+            {{ posting.postingCategory?.description }}
+          </td>
+          <td *ngIf="!posting?.postingCategoryId">
+            <posting-category-selector
+              [size]="defaultSizes.SMALL"
+              [noLabel]="true"
+              onclick="event.stopPropagation()"
+              (selectedPostingCategoryEvent)="
+                postingCategorySelected($event, posting)
+              "
+            ></posting-category-selector>
+          </td>
+
+          <td *ngIf="posting?.postingGroupId">
+            {{ posting.postingGroup?.description }}
+          </td>
+          <td *ngIf="!posting?.postingGroupId">
+            <posting-group-selector
+              [size]="defaultSizes.SMALL"
+              [noLabel]="true"
+              onclick="event.stopPropagation()"
+              (selectedPostingGroupEvent)="
+                postingGroupSelected($event, posting)
+              "
+            ></posting-group-selector>
+          </td>
+
+          <td>{{ posting.dueDate | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ posting.paymentDate | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ posting.account?.description }}</td>
+          <td>
+            <div *ngIf="posting.installments">
+              {{ posting.installment }} / {{ posting.installments }}
+            </div>
+          </td>
+          <td>
+            <fa-icon
+              *ngIf="posting.observation"
+              [icon]="faCommentDots"
+            ></fa-icon>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 
 <ng-template #empty>
-  <div *ngIf="!resolved" class="container mt-3">
+  <!-- <div *ngIf="!resolved" class="container mt-3">
     <loading></loading>
   </div>
-  <div *ngIf="resolved" class="container mt-3">
-    <div class="row text-center">
-      <h4 class="display-6">Não há lançamentos</h4>
-    </div>
+  <div *ngIf="resolved" class="container mt-3"> -->
+  <div class="row text-center">
+    <h4 class="display-6">Não há lançamentos</h4>
   </div>
+  <!-- </div> -->
 </ng-template>

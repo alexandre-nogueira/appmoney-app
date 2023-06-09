@@ -7,4 +7,5 @@ export enum PostingSearchParams {
   page = 'page',
   perPage = 'perPage',
   status = 'status',
+  installmentsOnly = 'installmentsOnly',
 }

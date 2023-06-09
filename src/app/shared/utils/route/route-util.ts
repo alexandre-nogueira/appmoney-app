@@ -39,8 +39,14 @@ export abstract class RouteUtil {
   public static prepareHttpParams(params: Params): HttpParams {
     let httpParams = new HttpParams();
 
-    Object.keys(params).some((field) => {
-      httpParams = httpParams.set(field, params[field]);
+    Object.keys(params).forEach((field) => {
+      if (Array.isArray(params[field])) {
+        params[field].forEach((value: any) => {
+          httpParams = httpParams.append(field, value);
+        });
+      } else {
+        httpParams = httpParams.set(field, params[field]);
+      }
     });
 
     return httpParams;

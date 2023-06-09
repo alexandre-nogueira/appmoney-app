@@ -78,65 +78,183 @@
           ></account-selector>
         </div>
       </div>
-      <div class="row mt-1">
-        <div class="col-lg-12 col-md-6 col-sm-9 col-12">
-          <label for="status" class="form-label col-form-label-sm"
-            >Status</label
-          >
-          <select
-            id="status"
-            [(ngModel)]="status"
-            class="form-select form-select-sm"
+      <div class="row mt-3">
+        <div class="d-grid gap-2 col-lg-5 col-md-3 col-sm-4 col-12">
+          <input
+            class="btn-check"
+            type="checkbox"
+            id="selectPending"
+            [(ngModel)]="selectPending"
             (ngModelChange)="statusSelected($event)"
-          >
-            <option value="ALL">Selecione...</option>
-            <option value="PENDING">Pendentes</option>
-            <option value="PAID">Pagos</option>
-            <option value="REVERSED">Estornados</option>
-            <option value="DELETED">Eliminados</option>
-          </select>
+          />
+          <label class="btn btn-outline-warning btn-sm" for="selectPending">
+            Pendentes
+          </label>
+          <input
+            class="btn-check"
+            type="checkbox"
+            id="selectPaid"
+            [(ngModel)]="selectPaid"
+            (ngModelChange)="statusSelected($event)"
+          />
+          <label class="btn btn-outline-success btn-sm" for="selectPaid">
+            Pagos
+          </label>
+          <input
+            class="btn-check"
+            type="checkbox"
+            id="selectDeleted"
+            [(ngModel)]="selectDeleted"
+            (ngModelChange)="statusSelected($event)"
+          />
+          <label class="btn btn-outline-danger btn-sm" for="selectDeleted">
+            Eliminados
+          </label>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-12">
+          <div class="form-check form-switch">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              role="switch"
+              id="installmentsOnly"
+              [(ngModel)]="installmentsOnly"
+              (ngModelChange)="installmentsOnlySelected()"
+            />
+            <label
+              class="form-check-label col-form-label-sm"
+              for="installmentsOnly"
+              >Somente parcelados</label
+            >
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-lg-10 col-md-12 col-sm-12">
-      <div class="row">
-        <div class="col-lg-4">
-          <summarizer
-            [label]="'Receitas'"
-            [nature]="nature.REVENUE"
-          ></summarizer>
+    <div
+      *ngIf="postingList$ | async as postingList; else empty"
+      class="col-lg-10 col-md-12 col-sm-12"
+    >
+      <div *ngIf="resolved === true; else empty">
+        <div class="row">
+          <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+            <summarizer
+              [label]="'Receitas'"
+              [nature]="nature.REVENUE"
+              [value]="totalRevenues"
+            ></summarizer>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+            <summarizer
+              [label]="'Despesas'"
+              [nature]="nature.EXPENSE"
+              [value]="totalExpenses"
+            ></summarizer>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+            <summarizer
+              [label]="'Classificar'"
+              [nature]="nature.NONE"
+              [value]="totalNonClassified"
+            ></summarizer>
+          </div>
         </div>
-        <div class="col-lg-4">
-          <summarizer
-            [label]="'Despesas'"
-            [nature]="nature.EXPENSE"
-          ></summarizer>
-        </div>
-      </div>
-      <div class="row mt-2">
-        <div class="col-12">
-          <ul
-            ngbNav
-            #nav="ngbNav"
-            [(activeId)]="activeTab"
-            class="nav nav-tabs"
-          >
-            <li [ngbNavItem]="1" class="nav-item">
-              <a ngbNavLink class="nav-link">Detalhado</a>
-              <ng-template ngbNavContent>
-                <posting-list></posting-list>
-              </ng-template>
-            </li>
-            <li [ngbNavItem]="2" class="nav-item">
-              <a ngbNavLink class="nav-link">Agrupado</a>
-              <ng-template ngbNavContent>
-                <posting-list-grouped></posting-list-grouped>
-              </ng-template>
-            </li>
-          </ul>
-          <div [ngbNavOutlet]="nav" class="mt-2"></div>
+        <div class="row mt-2">
+          <div class="col-12">
+            <ul
+              ngbNav
+              #nav="ngbNav"
+              [(activeId)]="activeTab"
+              class="nav nav-tabs"
+            >
+              <li [ngbNavItem]="1" class="nav-item">
+                <a ngbNavLink class="nav-link">Detalhado</a>
+                <ng-template ngbNavContent>
+                  <posting-list [postingList]="postingList"></posting-list>
+                </ng-template>
+              </li>
+              <li [ngbNavItem]="2" class="nav-item">
+                <a ngbNavLink class="nav-link">Por categoria</a>
+                <ng-template ngbNavContent>
+                  <div class="row mt-2">
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 mt-2">
+                      <posting-list-grouped
+                        [postings]="
+                          filterByNature(postingList?.data, nature.REVENUE)
+                        "
+                        [title]="'Receitas'"
+                        [nature]="nature.REVENUE"
+                      ></posting-list-grouped>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 mt-2">
+                      <posting-list-grouped
+                        [postings]="
+                          filterByNature(postingList?.data, nature.EXPENSE)
+                        "
+                        [title]="'Despesas'"
+                        [nature]="nature.EXPENSE"
+                      ></posting-list-grouped>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 mt-2">
+                      <posting-list-grouped
+                        [postings]="
+                          filterByNature(postingList?.data, nature.NONE)
+                        "
+                        [title]="'Não classificados'"
+                        [nature]="nature.NONE"
+                      ></posting-list-grouped>
+                    </div>
+                  </div>
+                </ng-template>
+              </li>
+
+              <li [ngbNavItem]="3" class="nav-item">
+                <a ngbNavLink class="nav-link">Por agrupador</a>
+                <ng-template ngbNavContent>
+                  <div class="row mt-2">
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 mt-2">
+                      <posting-list-grouped
+                        [postings]="
+                          filterByNature(postingList?.data, nature.REVENUE)
+                        "
+                        [title]="'Receitas'"
+                        [nature]="nature.REVENUE"
+                        [groupBy]="groupBy.GROUP"
+                      ></posting-list-grouped>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 mt-2">
+                      <posting-list-grouped
+                        [postings]="
+                          filterByNature(postingList?.data, nature.EXPENSE)
+                        "
+                        [title]="'Despesas'"
+                        [nature]="nature.EXPENSE"
+                        [groupBy]="groupBy.GROUP"
+                      ></posting-list-grouped>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 mt-2">
+                      <posting-list-grouped
+                        [postings]="
+                          filterByNature(postingList?.data, nature.NONE)
+                        "
+                        [title]="'Não classificados'"
+                        [nature]="nature.NONE"
+                        [groupBy]="groupBy.GROUP"
+                      ></posting-list-grouped>
+                    </div>
+                  </div>
+                </ng-template>
+              </li>
+            </ul>
+            <div [ngbNavOutlet]="nav" class="mt-2"></div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<ng-template #empty>
+  <loading></loading>
+</ng-template>

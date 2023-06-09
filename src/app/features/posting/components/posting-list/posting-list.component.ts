@@ -1,13 +1,18 @@
 import { PostingService } from './../../services/posting.service';
 import { ActivatedRoute } from '@angular/router';
-import { Posting, PostingsPaginated } from './../../interfaces/posting';
-import { Observable, tap } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import {
+  Posting,
+  Postings,
+  PostingsPaginated,
+} from './../../interfaces/posting';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { Natures } from 'src/app/shared/enums/Nature';
 import { AlertService } from 'src/app/shared/components/alert/alert.service';
 import { DefaultSizes } from 'src/app/shared/utils/layout/default-sizes';
 import { PostingCategory } from 'src/app/features/posting-category/interfaces/posting-category';
 import { PostingGroup } from 'src/app/features/posting-group/interfaces/posting-group';
+import { RouteUtil } from 'src/app/shared/utils/route/route-util';
+import { faCommentDots } from '@fortawesome/free-regular-svg-icons';
 
 @Component({
   selector: 'posting-list',
@@ -15,9 +20,15 @@ import { PostingGroup } from 'src/app/features/posting-group/interfaces/posting-
   styleUrls: ['./posting-list.component.scss'],
 })
 export class PostingListComponent implements OnInit {
-  postingList$!: Observable<PostingsPaginated>;
+  @Input() postingList!: PostingsPaginated;
+
+  // postingList$!: Observable<PostingsPaginated>;
   resolved = false;
   defaultSizes = DefaultSizes;
+  filterText!: string;
+
+  //icons
+  faCommentDots = faCommentDots;
 
   constructor(
     private postingService: PostingService,
@@ -25,38 +36,7 @@ export class PostingListComponent implements OnInit {
     private alertService: AlertService
   ) {}
 
-  ngOnInit(): void {
-    this.postingList$ = this.postingService.getList().pipe(
-      tap({
-        next: (result) => {
-          this.resolved = true;
-          this.setTotals(result);
-        },
-        complete: () => {
-          this.resolved = true;
-        },
-        error: (error) => {
-          this.resolved = true;
-          this.alertService.danger('Erro ao selecionar lançamentos');
-          console.log(error);
-        },
-      })
-    );
-  }
-
-  setTotals(postingsPagiinated: PostingsPaginated) {
-    let revenues = 0;
-    let expenses = 0;
-    postingsPagiinated.data?.forEach((posting) => {
-      if (posting.postingCategory?.nature === Natures.REVENUE) {
-        revenues += posting.value ?? 0;
-      } else {
-        expenses += posting.value ?? 0;
-      }
-    });
-    this.postingService.setTotal(revenues, Natures.REVENUE);
-    this.postingService.setTotal(expenses, Natures.EXPENSE);
-  }
+  ngOnInit(): void {}
 
   showDetail(posting: Posting) {
     this.postingService.openDetailDialog(
@@ -66,6 +46,9 @@ export class PostingListComponent implements OnInit {
   }
 
   getValueClass(posting: Posting): string {
+    if (!posting.postingCategory) {
+      return '';
+    }
     if (posting.postingCategory?.nature === Natures.EXPENSE) {
       return 'text-danger';
     } else {
@@ -79,7 +62,9 @@ export class PostingListComponent implements OnInit {
     this.postingService.edit(posting).subscribe({
       next: () => {
         this.alertService.success('Categoria atualizada');
-        this.postingService.refreshList(this.activatedRoute.snapshot.params);
+        this.postingService.refreshList(
+          RouteUtil.prepareQSParams(this.activatedRoute.snapshot.params, {})
+        );
       },
       error: (error) => {
         this.alertService.danger('Erro ao atualizar categoria');
@@ -94,12 +79,29 @@ export class PostingListComponent implements OnInit {
     this.postingService.edit(posting).subscribe({
       next: () => {
         this.alertService.success('Lançamento atualizado');
-        this.postingService.refreshList(this.activatedRoute.snapshot.params);
+        this.postingService.refreshList(
+          RouteUtil.prepareQSParams(this.activatedRoute.snapshot.params, {})
+        );
       },
       error: (error) => {
         this.alertService.danger('Erro ao atualizar lançamento');
         console.log(error);
       },
+    });
+  }
+
+  sortPostings(postingList?: Postings) {
+    return postingList?.sort((a: Posting, b: Posting) => {
+      if (a.dueDate && b.dueDate) {
+        if (a.dueDate < b.dueDate) {
+          return -1;
+        } else if (a.dueDate > b.dueDate) {
+          return 1;
+        } else {
+          return 0;
+        }
+      }
+      return 0;
     });
   }
 }

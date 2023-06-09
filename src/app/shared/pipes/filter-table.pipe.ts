@@ -4,7 +4,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'filterTable',
 })
 export class FilterTablePipe implements PipeTransform {
-  transform(items: Array<any>, searchText: string): Array<any> {
+  transform(items?: Array<any>, searchText?: string): Array<any> {
     if (!items) {
       return [];
     }
@@ -13,9 +13,14 @@ export class FilterTablePipe implements PipeTransform {
     }
 
     return items.filter((item) =>
-      Object.keys(item).some((field) =>
-        item[field].toString().toLowerCase().includes(searchText.toLowerCase())
-      )
+      Object.keys(item).some((field) => {
+        if (typeof item[field] !== 'object') {
+          return item[field]
+            .toString()
+            .toLowerCase()
+            .includes(searchText.toLowerCase());
+        }
+      })
     );
   }
 }

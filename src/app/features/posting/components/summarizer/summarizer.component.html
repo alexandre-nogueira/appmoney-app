@@ -1,6 +1,0 @@
-<div *ngIf="value$ | async as value; else zero">
-  <p [class]="getClass()">{{ label }} {{ value | currency: 'BRL' }}</p>
-</div>
-<ng-template #zero>
-  <p [class]="getClass()">{{ label }} {{ 0 | currency: 'BRL' }}</p>
-</ng-template>

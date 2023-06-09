@@ -27,6 +27,7 @@ export class PostingCategoryListComponent implements OnInit {
   ngOnInit(): void {
     this.postingCategoryList$ = this.postingCategoryService.getList().pipe(
       tap({
+        next: () => (this.resolved = true),
         error: () => (this.resolved = true),
         complete: () => (this.resolved = true),
       })

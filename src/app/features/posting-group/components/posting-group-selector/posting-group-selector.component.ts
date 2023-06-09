@@ -79,4 +79,13 @@ export class PostingGroupSelectorComponent
       });
     }
   }
+
+  sort(postingGroup?: PostingGroups) {
+    return postingGroup?.sort((a: PostingGroup, b: PostingGroup) => {
+      if (a.description && b.description) {
+        return a.description.localeCompare(b.description);
+      }
+      return 0;
+    });
+  }
 }

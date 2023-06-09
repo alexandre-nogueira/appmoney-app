@@ -15,6 +15,9 @@ export interface Posting {
   account?: Account;
   postingCategory?: PostingCategory;
   postingGroup?: PostingGroup;
+  installment?: number;
+  installments?: number;
+  observation?: string;
 }
 
 export type Postings = Array<Posting>;
@@ -35,7 +38,7 @@ export interface MassPostingsReturn {
 }
 
 export interface PostingsGrouped {
-  postingCategoryId?: number;
-  postingCategory?: PostingCategory;
-  total?: number;
+  id: number;
+  description: string;
+  total: number;
 }

@@ -25,6 +25,7 @@ export class PostingGroupListComponent implements OnInit {
   ngOnInit(): void {
     this.postingGroupList$ = this.postingGroupService.getList().pipe(
       tap({
+        next: () => (this.resolved = true),
         error: () => (this.resolved = true),
         complete: () => (this.resolved = true),
       })

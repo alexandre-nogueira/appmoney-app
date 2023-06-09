@@ -116,7 +116,45 @@
         postingForm.get('accountId')?.touched"
         ></form-message>
       </div>
+      <div class="col-lg-2">
+        <label for="installment" class="form-label">Parcela</label>
+        <input
+          type="number"
+          class="form-control"
+          id="value"
+          formControlName="installment"
+        />
+      </div>
+      <div class="col-lg-2">
+        <label for="installments" class="form-label">De</label>
+        <input
+          type="number"
+          class="form-control"
+          id="value"
+          formControlName="installments"
+        />
+      </div>
     </div>
+
+    <div class="row mt-2">
+      <div class="col-12">
+        <label for="observation" class="form-label">Observação</label>
+        <textarea
+          type="text"
+          class="form-control"
+          id="observation"
+          formControlName="observation"
+          placeholder="Observação"
+        ></textarea>
+        <form-message
+          message="Observação obrigatória"
+          *ngIf="
+          postingForm.get('observation')?.errors?.['maxLength'] &&
+          postingForm.get('observation')?.touched"
+        ></form-message>
+      </div>
+    </div>
+
     <div class="row mt-3">
       <div class="col-12 text-end">
         <button

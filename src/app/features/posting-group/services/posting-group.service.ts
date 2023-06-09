@@ -1,6 +1,6 @@
 import { CrudService } from 'src/app/shared/interfaces/crud-service';
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PostingGroup, PostingGroups } from '../interfaces/posting-group';
 import { environment } from 'src/environments/environment';
@@ -10,7 +10,7 @@ const API = environment.apiURL;
   providedIn: 'root',
 })
 export class PostingGroupService implements CrudService {
-  postingGroups$: Subject<PostingGroups> = new Subject();
+  postingGroups$ = new BehaviorSubject<PostingGroups>([]);
 
   constructor(private httpClient: HttpClient) {}
   refreshList(): void {
@@ -22,7 +22,6 @@ export class PostingGroupService implements CrudService {
   }
 
   getList(): Observable<PostingGroups> {
-    this.refreshList();
     return this.postingGroups$.asObservable();
   }
 

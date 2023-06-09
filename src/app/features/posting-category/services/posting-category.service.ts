@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { CrudService } from 'src/app/shared/interfaces/crud-service';
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import {
   PostingCategories,
   PostingCategory,
@@ -14,7 +14,8 @@ const API = environment.apiURL;
   providedIn: 'root',
 })
 export class PostingCategoryService implements CrudService {
-  postingCategories$: Subject<PostingCategories> = new Subject();
+  // postingCategories$: Subject<PostingCategories> = new Subject();
+  postingCategories$ = new BehaviorSubject<PostingCategories>([]);
 
   constructor(private httpClient: HttpClient) {}
 
@@ -27,7 +28,6 @@ export class PostingCategoryService implements CrudService {
   }
 
   getList(): Observable<PostingCategories> {
-    this.refreshList();
     return this.postingCategories$.asObservable();
   }
 

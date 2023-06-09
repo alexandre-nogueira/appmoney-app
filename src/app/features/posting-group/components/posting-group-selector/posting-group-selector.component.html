@@ -14,7 +14,7 @@
   >
     <option value="0">Selecione...</option>
     <option
-      *ngFor="let postingGroup of postingGroupList"
+      *ngFor="let postingGroup of sort(postingGroupList)"
       [value]="postingGroup.id"
     >
       {{ postingGroup.description }}

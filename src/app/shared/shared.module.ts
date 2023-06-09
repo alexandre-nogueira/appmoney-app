@@ -6,6 +6,7 @@ import { LoadingComponent } from './components/loading/loading.component';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 import { FilterTablePipe } from './pipes/filter-table.pipe';
 import { UploadFileComponent } from './components/upload-file/upload-file.component';
+import { SummarizerComponent } from './components/summarizer/summarizer.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { UploadFileComponent } from './components/upload-file/upload-file.compon
     ConfirmationModalComponent,
     FilterTablePipe,
     UploadFileComponent,
+    SummarizerComponent,
   ],
   imports: [CommonModule],
   exports: [
@@ -23,6 +25,7 @@ import { UploadFileComponent } from './components/upload-file/upload-file.compon
     LoadingComponent,
     FilterTablePipe,
     UploadFileComponent,
+    SummarizerComponent,
   ],
 })
 export class SharedModule {}

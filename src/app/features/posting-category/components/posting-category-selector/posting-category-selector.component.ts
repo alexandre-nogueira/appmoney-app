@@ -80,4 +80,13 @@ export class PostingCategorySelectorComponent
       });
     }
   }
+
+  sort(postingCategries?: PostingCategories) {
+    return postingCategries?.sort((a: PostingCategory, b: PostingCategory) => {
+      if (a.description && b.description) {
+        return a.description.localeCompare(b.description);
+      }
+      return 0;
+    });
+  }
 }

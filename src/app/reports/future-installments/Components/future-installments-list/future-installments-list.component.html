@@ -1,0 +1,32 @@
+<div class="row mt-2 crudTableContainer">
+  <div class="col-12">
+    <table class="table table-striped">
+      <thead>
+        <th scope="col" class="fontSmall">Descrição</th>
+        <th scope="col" class="fontSmall">Valor</th>
+        <th scope="col" class="fontSmall">Categoria</th>
+        <th scope="col" class="fontSmall">Agrupador</th>
+        <th scope="col" class="fontSmall">Data</th>
+        <th scope="col" class="fontSmall">Conta</th>
+        <th scope="col" class="fontSmall">Parcela</th>
+      </thead>
+      <tbody>
+        <tr
+          class="fontSmall"
+          *ngFor="let futureInstallment of futureInstallments"
+        >
+          <td>{{ futureInstallment.description }}</td>
+          <td>{{ futureInstallment.value | currency: 'BRL' }}</td>
+          <td>{{ futureInstallment.postingCategory?.description }}</td>
+          <td>{{ futureInstallment.postingGroup?.description }}</td>
+          <td>{{ futureInstallment.dueDate | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ futureInstallment.account?.description }}</td>
+          <td>
+            {{ futureInstallment.installment }} /
+            {{ futureInstallment.installments }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

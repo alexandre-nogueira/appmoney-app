@@ -1,0 +1,56 @@
+<div class="container">
+  <div class="row">
+    <div class="row mt-2 mb-3">
+      <div class="col-12">
+        <h3 class="display-6">Compras Parceladas</h3>
+      </div>
+    </div>
+    <div *ngIf="futureInstallments$ | async as futureInstallments">
+      <div *ngIf="resolved === true; else empty">
+        <div class="row">
+          <!-- seletor de data -->
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="row text-center">
+              <a
+                (click)="setMonth(-1)"
+                class="col-lg-2 col-md-2 col-sm-2 col-2"
+              >
+                <fa-icon [icon]="faCaretLeft" size="2x"></fa-icon>
+              </a>
+              <div class="col-lg-8 col-md-8 col-sm-8 col-8">
+                <span class="badge bg-primary fs-5">{{
+                  targetMonth | date: 'MMMM-YYYY'
+                }}</span>
+              </div>
+              <a (click)="setMonth(1)" class="col-lg-2 col-md-2 col-sm-2 col-2">
+                <fa-icon [icon]="faCaretRight" size="2x"></fa-icon>
+              </a>
+            </div>
+          </div>
+
+          <!-- sumarizer -->
+          <div class="col-lg-9 col-md-8 col-sm-6 col-12 text-end">
+            <summarizer
+              [label]="'Total'"
+              [nature]="nature.EXPENSE"
+              [value]="totalInstallments"
+            ></summarizer>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-12">
+            <div>
+              <future-installments-list
+                [futureInstallments]="futureInstallments"
+              ></future-installments-list>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #empty>
+  <loading></loading>
+</ng-template>

@@ -14,7 +14,7 @@
   >
     <option value="0">Selecione...</option>
     <option
-      *ngFor="let postingCategory of postingCategoryList"
+      *ngFor="let postingCategory of sort(postingCategoryList)"
       [value]="postingCategory.id"
     >
       {{ postingCategory.description }}
